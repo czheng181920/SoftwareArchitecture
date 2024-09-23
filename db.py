@@ -74,9 +74,8 @@ def createTable(database):
     connection.close()
 
 # create tables
-createTable('calendar.db')
-
-
+# run only once to create tables
+#createTable('calendar.db')
 
 #print data from certain table
 def getData():
@@ -89,7 +88,7 @@ def getData():
     connection.close()
     return data
 
-
+#get connection
 def getConnection():
     return sqlite3.connect(database)
 
