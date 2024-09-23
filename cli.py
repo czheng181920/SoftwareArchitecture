@@ -1,3 +1,4 @@
+import sqlite3
 import uuid
 from logic import db_create_meeting, db_create_associated_calendar, db_create_participant, db_create_attachment
 
@@ -37,6 +38,7 @@ def get_input(prompt, validation_fn=None):
 def generate_uuid():
     return str(uuid.uuid4())
 
+#chelsea
 def create_meeting():
     title = get_input("Enter meeting title: ")
     date_time = get_input("Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
@@ -79,21 +81,27 @@ def create_meeting():
         db_create_attachment(attachment_id, meeting_id, attachment_url)
         print(f"Attachment {attachment_url} added.")
 
+#neha
 def query_all_meetings():
     print("Querying all meetings... (to be implemented later)")
+
 
 def query_meeting_by_id():
     print("Querying meeting by ID... (to be implemented later)")
 
+
 def update_meeting():
     print("Updating a meeting... (to be implemented later)")
 
+#neha
 def delete_meeting():
-    print("Deleting a meeting... (to be implemented later)")
+    print('Deleted Meeting!')
+
 
 def create_calendar():
     print("Creating a new calendar... (to be implemented later)")
 
+#amala
 def query_all_calendars():
     print("Querying all calendars... (to be implemented later)")
 
@@ -103,6 +111,7 @@ def query_calendar_by_id():
 def update_calendar():
     print("Updating a calendar... (to be implemented later)")
 
+#amala
 def delete_calendar():
     print("Deleting a calendar... (to be implemented later)")
 
