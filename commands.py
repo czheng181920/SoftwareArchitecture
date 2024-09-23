@@ -21,6 +21,23 @@ def addMeeting(title, date_time, location, details):
     connection.commit()
     connection.close()
 
+# Add calendar function
+def addCalendar(title, details):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    calendar_id = str(uuid.uuid4())
+    cursor.execute('''
+        INSERT INTO Calendars (calendar_id, title, details) 
+        VALUES (?, ?, ?);
+    ''', (calendar_id, title, details))
+    print('Added Calendar!')
+
+    connection.commit()
+    connection.close()
+
 #Search meeting function
 def findMeetings():
     connection = sqlite3.connect(database)
@@ -31,6 +48,20 @@ def findMeetings():
     allMeetings = cursor.fetchall()
 
     for meeting in allMeetings:
+        print(meeting)
+
+    connection.close()
+
+# Search calendars function
+def findCalendars():
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Calendars')
+    allCalendars = cursor.fetchall()
+
+    for meeting in allCalendars:
         print(meeting)
 
     connection.close()
@@ -47,6 +78,17 @@ def deleteMeeting(title):
     connection.close()
     print('Deleted Meeting!')
 
+#deleteCalendar
+def deleteCalendar(title):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('DELETE FROM Calendars WHERE title=?', (title,))
+
+    connection.commit()
+    connection.close()
+    print('Deleted Calendar!')
 
 #add rest of functions here 
 #!---------------------------------------------------
@@ -79,6 +121,18 @@ def main():
             deleteMeeting(args.title)
         else:
             print("For 'delete_meeting', please give the meeting --title.")
+    if args.operation == "addCalendar":
+        if args.title and args.title:
+            addCalendar(args.title, args.details or "")
+        else:
+            print("For 'addCalendar', please give the following params --title, --details.")
+    elif args.operation == "findCalendars":
+        findCalendars()
+    elif args.operation == "deleteCalendar":
+        if args.title:
+            deleteMeeting(args.title)
+        else:
+            print("For 'delete_meeting', please give the calendar --title.")
     else:
         print("This is not a valid operation.")
 
