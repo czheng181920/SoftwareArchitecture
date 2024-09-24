@@ -11,7 +11,6 @@ def db_create_meeting(meeting_id, title, date_time, location, details):
 
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    meeting_id = str(uuid.uuid4())
     cursor.execute('''
         INSERT INTO Meetings (meeting_id, title, date_time, location, details) 
         VALUES (?, ?, ?, ?, ?);
@@ -54,7 +53,7 @@ def db_update_meeting(meeting_id, title, date_time, location, details):
     cursor = connection.cursor()
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    cursor.execute('UPDATE Users SET title=?, date_time=?, location=?, details=? WHERE meeting_id=?', 
+    cursor.execute('UPDATE Meetings SET title=?, date_time=?, location=?, details=? WHERE meeting_id=?', 
                    (title, date_time, location, details, meeting_id))
     
     allMeetings = cursor.fetchall()
@@ -125,7 +124,7 @@ def db_update_calendar(calendar_id, title, details):
     cursor = connection.cursor()
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    cursor.execute('UPDATE Users SET title=?, details=? WHERE calendar_id=?', 
+    cursor.execute('UPDATE Calendars SET title=?, details=? WHERE calendar_id=?', 
                    (title, details, calendar_id))
     
     allCalendars = cursor.fetchall()
@@ -222,17 +221,19 @@ def db_delete_participant(participant_id):
     print('Deleted Participant!')
 
 # attachment functions
-def db_create_participant(attachment_id, meeting_id, url):
+def db_create_attachment(attachment_id, meeting_id, url):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
     cursor.execute('PRAGMA foreign_keys = ON')
-
+    
+    print(f"attachment_id: {attachment_id}, meeting_id: {meeting_id}, attachment_url: {url}")
     cursor.execute('''
         INSERT INTO Attachments (attachment_id, meeting_id, url) 
         VALUES (?, ?, ?);
     ''', (attachment_id, meeting_id, url))
     print('Added Participant!')
+
 
     connection.commit()
     connection.close()
@@ -284,3 +285,19 @@ def db_delete_attachment(attachment_id):
     connection.commit()
     connection.close()
     print('Deleted Participant!')
+    
+#create a calendar-meeting relationship
+def db_create_associated_calendar_meeting(meeting_id, calendar_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('''
+        INSERT INTO Meetings_Calendars (meeting_id, calendar_id) 
+        VALUES (?, ?);
+    ''', (meeting_id, calendar_id))
+    print('Added Meeting to Calendar!')
+
+    connection.commit()
+    connection.close()
