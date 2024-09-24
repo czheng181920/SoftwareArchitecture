@@ -47,13 +47,18 @@ def is_valid_email(email):
 
 #chelsea
 def create_meeting():
-    title = input("Enter meeting title: ")
-    date_time = input("Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
-    location = input("Enter meeting location: ")
-    details = input("Enter meeting details: ")
 
-    meeting_id = str(uuid.uuid4())
-    
+
+    #user can make their own meeting id
+    meeting_id = get_input("Enter meeting ID (or type 'done' to finish): ")
+    if meeting_id.lower() == 'done':
+        meeting_id = generate_uuid()
+    title = get_input("Enter meeting title: ")
+    date_time = get_input("Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
+    location = get_input("Enter meeting location: ")
+    details = get_input("Enter meeting details: ")
+
+
     logic.db_create_meeting(meeting_id, title, date_time, location, details)
 
     print(f"Meeting created with ID: {meeting_id}")
@@ -63,7 +68,7 @@ def create_meeting():
         calendar_id = input("Enter associated calendar ID (or type 'done' to finish): ")
         if calendar_id.lower() == 'done':
             break
-        logic.db_create_associated_calendar(meeting_id, calendar_id)
+        logic.db_create_associated_calendar_meeting(meeting_id, calendar_id)
         print(f"Associated calendar {calendar_id} added.")
 
     # Prompt for participants
@@ -84,14 +89,14 @@ def create_meeting():
 
     # Prompt for attachments
     while True:
-        attachment_url = get_input("Enter attachment URL (or type 'done' to finish): ")
-        if attachment_url.lower() == 'done':
+        url = get_input("Enter attachment URL (or type 'done' to finish): ")
+        if url.lower() == 'done':
             break
 
         attachment_id = generate_uuid()  # Generate UUID for the attachment
 
-        logic.db_create_attachment(attachment_id, meeting_id, attachment_url)
-        print(f"Attachment {attachment_url} added.")
+        logic.db_create_attachment(attachment_id, meeting_id, url)
+        print(f"Attachment {url} added.")
 
 #neha
 def query_all_meetings():
@@ -120,10 +125,13 @@ def delete_meeting():
 
 #amala
 def create_calendar():
+    calendar_id = get_input("Enter calendar ID (or type 'done' to finish): ")
+    if calendar_id.lower() == 'done':
+        calendar_id = generate_uuid()
     title = get_input("Enter calendar title: ")
     details = get_input("Enter details: ")
 
-    logic.db_create_calendar(title, details)
+    logic.db_create_calendar(calendar_id, title, details)
 
 #amala
 def query_all_calendars():
@@ -161,7 +169,9 @@ def create_participant():
     name = get_input("Enter participant name: ")
     email = get_input("Enter participant email: ")
     
-    participant_id = generate_uuid()
+    participant_id = get_input("Enter participant ID (or type 'done' to finish): ")
+    if participant_id.lower() == 'done':
+       participant_id = generate_uuid()
 
     logic.db_create_participant(participant_id, meeting_id, name, email)
 
@@ -196,7 +206,9 @@ def create_attachment():
     
     url = get_input("Enter attachment URL: ")
     
-    attachment_id = generate_uuid()
+    attachment_id = get_input("Enter attachment ID (or type 'done' to finish): ")
+    if attachment_id.lower() == 'done':
+       attachment_id = generate_uuid()
 
     logic.db_create_attachment(attachment_id, meeting_id, url)
 
@@ -218,6 +230,19 @@ def update_attachment():
 def delete_attachment():
     attachment_id = get_input("Enter attachment ID: ")
     logic.db_delete_attachment(attachment_id)
+
+
+#manage meetings in calendar
+def delete_meeting_calendar():
+    calendar_id = get_input("Enter calendar_id of calendar for meeting to be deleted: ")
+    meeting_id = get_input(f"Enter meeting_id of meeting from calendar {calendar_id} to be deleted: ")
+    logic.db_delete_meeting_calendar(calendar_id,meeting_id)
+
+def add_meeting_calendar():
+    calendar_id = get_input("Enter calendar_id of calendar for meeting to be added: ")
+    meeting_id = get_input(f"Enter meeting_id of meeting from calendar {calendar_id} to be added: ")
+    logic.db_create_associated_calendar_meeting(calendar_id, meeting_id)
+    
 
 def manage_meetings():
     print("\nManage Meetings")
@@ -251,6 +276,8 @@ def manage_calendars():
     print("3. Query Calendar by ID")
     print("4. Update Calendar")
     print("5. Delete Calendar")
+    print("6. Delete Meeting from Calendar")
+    print("7. Add Meeting to Calender")
     
     choice = input("Enter your choice: ")
     if choice == '1':
@@ -263,6 +290,11 @@ def manage_calendars():
         update_calendar()
     elif choice == '5':
         delete_calendar()
+    elif choice == '6':
+        delete_meeting_calendar()
+    elif choice == '7':
+        add_meeting_calendar()
+        
     else:
         print("Invalid input. Please try again.")
         manage_calendars()
