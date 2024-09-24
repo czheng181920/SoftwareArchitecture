@@ -180,19 +180,37 @@ def delete_participant():
     logic.db_delete_participant(participant_id)
 
 def create_attachment():
-    print("Creating a new attachment... (to be implemented later)")
+    meeting_id = get_input("Enter meeting ID: ")
+    
+    # Validate meeting ID
+    if not logic.db_check_meeting_id(meeting_id):
+        print("Invalid meeting ID. Please enter a valid meeting ID.")
+        return
+    
+    url = get_input("Enter attachment URL: ")
+    
+    attachment_id = generate_uuid()
+
+    logic.db_create_attachment(attachment_id, meeting_id, url)
+
+    print(f"Attachment created with ID: {attachment_id}")
 
 def query_all_attachments():
-    print("Querying all attachments... (to be implemented later)")
+    logic.db_query_all_attachments()
 
 def query_attachment_by_id():
-    print("Querying attachment by ID... (to be implemented later)")
+    attachment_id = get_input("Enter attachment ID: ")
+    logic.db_query_attachment_by_id(attachment_id)
 
 def update_attachment():
-    print("Updating an attachment... (to be implemented later)")
+    attachment_id = get_input("Enter attachment ID: ")
+    url = get_input("Enter new attachment url: ")
+
+    logic.db_update_attachment(attachment_id, url)
 
 def delete_attachment():
-    print("Deleting an attachment... (to be implemented later)")
+    attachment_id = get_input("Enter attachment ID: ")
+    logic.db_delete_attachment(attachment_id)
 
 def manage_meetings():
     print("\nManage Meetings")
@@ -205,15 +223,15 @@ def manage_meetings():
     
     choice = input("Enter your choice: ")
     if choice == '1':
-        create_meeting()  # to be implemented later
+        create_meeting()  
     elif choice == '2':
-        query_all_meetings()  # to be implemented later
+        query_all_meetings() 
     elif choice == '3':
-        query_meeting_by_id()  # to be implemented later
+        query_meeting_by_id() 
     elif choice == '4':
-        update_meeting()  # to be implemented later
+        update_meeting() 
     elif choice == '5':
-        delete_meeting()  # to be implemented later
+        delete_meeting() 
     else:
         print("Invalid input. Please try again.")
         manage_meetings()
@@ -229,15 +247,15 @@ def manage_calendars():
     
     choice = input("Enter your choice: ")
     if choice == '1':
-        create_calendar()  # to be implemented later
+        create_calendar()  
     elif choice == '2':
-        query_all_calendars()  # to be implemented later
+        query_all_calendars()  
     elif choice == '3':
-        query_calendar_by_id()  # to be implemented later
+        query_calendar_by_id() 
     elif choice == '4':
-        update_calendar()  # to be implemented later
+        update_calendar()
     elif choice == '5':
-        delete_calendar()  # to be implemented later
+        delete_calendar()
     else:
         print("Invalid input. Please try again.")
         manage_calendars()
@@ -253,15 +271,15 @@ def manage_participants():
     
     choice = input("Enter your choice: ")
     if choice == '1':
-        create_participant()  # to be implemented later
+        create_participant() 
     elif choice == '2':
-        query_all_participants()  # to be implemented later
+        query_all_participants() 
     elif choice == '3':
-        query_participant_by_id()  # to be implemented later
+        query_participant_by_id()
     elif choice == '4':
-        update_participant()  # to be implemented later
+        update_participant() 
     elif choice == '5':
-        delete_participant()  # to be implemented later
+        delete_participant() 
     else:
         print("Invalid input. Please try again.")
         manage_participants()
@@ -277,15 +295,15 @@ def manage_attachments():
     
     choice = input("Enter your choice: ")
     if choice == '1':
-        create_attachment()  # to be implemented later
+        create_attachment() 
     elif choice == '2':
-        query_all_attachments()  # to be implemented later
+        query_all_attachments() 
     elif choice == '3':
-        query_attachment_by_id()  # to be implemented later
+        query_attachment_by_id()
     elif choice == '4':
-        update_attachment()  # to be implemented later
+        update_attachment()
     elif choice == '5':
-        delete_attachment()  # to be implemented later
+        delete_attachment()
     else:
         print("Invalid input. Please try again.")
         manage_attachments()
