@@ -56,7 +56,7 @@ def create_meeting():
         calendar_id = get_input("Enter associated calendar ID (or type 'done' to finish): ")
         if calendar_id.lower() == 'done':
             break
-        logic.db_create_associated_calendar(meeting_id, calendar_id)
+        logic.db_create_associated_calendar_meeting(meeting_id, calendar_id)
         print(f"Associated calendar {calendar_id} added.")
 
     # Prompt for participants
@@ -77,14 +77,14 @@ def create_meeting():
 
     # Prompt for attachments
     while True:
-        attachment_url = get_input("Enter attachment URL (or type 'done' to finish): ")
-        if attachment_url.lower() == 'done':
+        url = get_input("Enter attachment URL (or type 'done' to finish): ")
+        if url.lower() == 'done':
             break
 
         attachment_id = generate_uuid()  # Generate UUID for the attachment
 
-        logic.db_create_attachment(attachment_id, meeting_id, attachment_url)
-        print(f"Attachment {attachment_url} added.")
+        logic.db_create_attachment(attachment_id, meeting_id, url)
+        print(f"Attachment {url} added.")
 
 #neha
 def query_all_meetings():
