@@ -76,13 +76,11 @@ def db_delete_meeting(meeting_id):
     print('Deleted Meeting!')
     print(f"Deleted Meeting {meeting_id}")
 
-def db_create_calendar(title, details):
+def db_create_calendar(calendar_id, title, details):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
     cursor.execute('PRAGMA foreign_keys = ON')
-
-    calendar_id = str(uuid.uuid4())
     cursor.execute('''
         INSERT INTO Calendars (calendar_id, title, details) 
         VALUES (?, ?, ?);

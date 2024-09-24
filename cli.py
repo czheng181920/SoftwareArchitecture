@@ -40,13 +40,16 @@ def generate_uuid():
 
 #chelsea
 def create_meeting():
+
+    #user can make their own meeting id
+    meeting_id = get_input("Enter meeting ID (or type 'done' to finish): ")
+    if meeting_id.lower() == 'done':
+        meeting_id = generate_uuid()
     title = get_input("Enter meeting title: ")
     date_time = get_input("Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
     location = get_input("Enter meeting location: ")
     details = get_input("Enter meeting details: ")
 
-    meeting_id = generate_uuid()
-    
     logic.db_create_meeting(meeting_id, title, date_time, location, details)
 
     print(f"Meeting created with ID: {meeting_id}")
@@ -113,6 +116,9 @@ def delete_meeting():
 
 #amala
 def create_calendar():
+    calendar_id = get_input("Enter calendar ID (or type 'done' to finish): ")
+    if calendar_id.lower() == 'done':
+        calendar_id = generate_uuid()
     title = get_input("Enter calendar title: ")
     details = get_input("Enter details: ")
 
@@ -154,7 +160,9 @@ def create_participant():
     name = get_input("Enter participant name: ")
     email = get_input("Enter participant email: ")
     
-    participant_id = generate_uuid()
+    participant_id = get_input("Enter participant ID (or type 'done' to finish): ")
+    if participant_id.lower() == 'done':
+       participant_id = generate_uuid()
 
     logic.db_create_participant(participant_id, meeting_id, name, email)
 
@@ -189,7 +197,9 @@ def create_attachment():
     
     url = get_input("Enter attachment URL: ")
     
-    attachment_id = generate_uuid()
+    attachment_id = get_input("Enter attachment ID (or type 'done' to finish): ")
+    if attachment_id.lower() == 'done':
+       attachment_id = generate_uuid()
 
     logic.db_create_attachment(attachment_id, meeting_id, url)
 
