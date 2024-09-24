@@ -310,7 +310,7 @@ def db_meeting_list_calendar(meeting_id):
 
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    cursor.execute('SELECT * FROM Meetings_Calendars WHERE meeting_id=?', (meeting_id,))
+    cursor.execute('SELECT calendar_id FROM Meetings_Calendars WHERE meeting_id=?', (meeting_id,))
 
     allCalendar = cursor.fetchall()
     for c in allCalendar:
@@ -326,7 +326,7 @@ def db_participant_list_calendar(meeting_id):
 
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    cursor.execute('SELECT * FROM Participants WHERE meeting_id=?', (meeting_id,))
+    cursor.execute('SELECT participant_id FROM Participants WHERE meeting_id=?', (meeting_id,))
 
     allParticipants = cursor.fetchall()
     for p in allParticipants:
@@ -342,7 +342,7 @@ def db_attachment_list_calendar(meeting_id):
 
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    cursor.execute('SELECT * FROM Attachments WHERE meeting_id=?', (meeting_id,))
+    cursor.execute('SELECT attachment_id FROM Attachments WHERE meeting_id=?', (meeting_id,))
 
     allParticipants = cursor.fetchall()
     for p in allParticipants:
@@ -352,7 +352,21 @@ def db_attachment_list_calendar(meeting_id):
     connection.close()
     print(f'Attachments List of Meeting {meeting_id}: ')
 
+def db_calendar_list_meeting(calendar_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
 
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT meeting_id FROM Meetings_Calendars WHERE calendar_id=?', (calendar_id,))
+
+    allMeetings = cursor.fetchall()
+    for m in allMeetings:
+        print(m)
+
+    connection.commit()
+    connection.close()
+    print(f'Meeting List for Calendar {calendar_id}: ')
 
     
 

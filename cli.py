@@ -258,6 +258,11 @@ def list_of_attachments_meeting():
     meeting_id = get_input("Enter meeting_id of Attachments list: ")
     logic.db_attachment_list_calendar(meeting_id)
 
+# calendar and their lists
+def list_of_meetings_calendar():
+    calendar_id = get_input("Enter calendar_id of Meeting List: ")
+
+    logic.db_calendar_list_meeting(calendar_id)
 
 def manage_meetings():
     print("\nManage Meetings")
@@ -302,6 +307,7 @@ def manage_calendars():
     print("5. Delete Calendar")
     print("6. Delete Meeting from Calendar")
     print("7. Add Meeting to Calender")
+    print ("8. List of Meetings for a Calendar")
     
     choice = input("Enter your choice: ")
     if choice == '1':
@@ -318,7 +324,8 @@ def manage_calendars():
         delete_meeting_calendar()
     elif choice == '7':
         add_meeting_calendar()
-        
+    elif choice == '8':
+        list_of_meetings_calendar()  
     else:
         print("Invalid input. Please try again.")
         manage_calendars()
