@@ -242,7 +242,22 @@ def add_meeting_calendar():
     calendar_id = get_input("Enter calendar_id of calendar for meeting to be added: ")
     meeting_id = get_input(f"Enter meeting_id of meeting from calendar {calendar_id} to be added: ")
     logic.db_create_associated_calendar_meeting(calendar_id, meeting_id)
+
+
+#meetings and their lists
+def list_of_calendars_meeting():
+    meeting_id = get_input("Enter meeting_id of Calendar list: ")
     
+    logic.db_meeting_list_calendar(meeting_id)
+
+def list_of_participants_meeting():
+     meeting_id = get_input("Enter meeting_id of Participants list: ")
+     logic.db_participant_list_calendar(meeting_id)
+
+def list_of_attachments_meeting():
+    meeting_id = get_input("Enter meeting_id of Attachments list: ")
+    logic.db_attachment_list_calendar(meeting_id)
+
 
 def manage_meetings():
     print("\nManage Meetings")
@@ -252,6 +267,9 @@ def manage_meetings():
     print("3. Query Meeting by ID")
     print("4. Update Meeting")
     print("5. Delete Meeting")
+    print ("6. List of Calendars for a Meeting")
+    print ("7. List of Participants for a Meeting")
+    print ("8. List of Attachments for a Meeting")
     
     choice = input("Enter your choice: ")
     if choice == '1':
@@ -264,6 +282,12 @@ def manage_meetings():
         update_meeting() 
     elif choice == '5':
         delete_meeting() 
+    elif choice == '6':
+        list_of_calendars_meeting()
+    elif choice == '7':
+        list_of_participants_meeting()
+    elif choice == '8':
+        list_of_attachments_meeting()    
     else:
         print("Invalid input. Please try again.")
         manage_meetings()

@@ -104,11 +104,10 @@ def db_query_calendar_by_id(calendar_id):
     cursor.execute('PRAGMA foreign_keys = ON')
 
     cursor.execute('SELECT * FROM Calendars WHERE calendar_id=?', (calendar_id,))
-    calendar = cursor.fetchall()
+    calendar = cursor.fetchone()
 
     print(f'Calendar found: {calendar_id}')
-    for c in calendar:
-        print(c)
+    print(calendar)
 
     connection.close()
 
@@ -304,6 +303,59 @@ def db_delete_meeting_calendar(calendar_id, meeting_id):
     connection.commit()
     connection.close()
     print(f'Deleted Meeting {meeting_id} from Calendar {calendar_id}')
+
+def db_meeting_list_calendar(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Meetings_Calendars WHERE meeting_id=?', (meeting_id,))
+
+    allCalendar = cursor.fetchall()
+    for c in allCalendar:
+        print(c)
+
+    connection.commit()
+    connection.close()
+    print(f'Calendar List of Meeting {meeting_id}: ')
+
+def db_participant_list_calendar(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Participants WHERE meeting_id=?', (meeting_id,))
+
+    allParticipants = cursor.fetchall()
+    for p in allParticipants:
+        print(p)
+
+    connection.commit()
+    connection.close()
+    print(f'Participant List of Meeting {meeting_id}: ')
+
+def db_attachment_list_calendar(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Attachments WHERE meeting_id=?', (meeting_id,))
+
+    allParticipants = cursor.fetchall()
+    for p in allParticipants:
+        print(p)
+
+    connection.commit()
+    connection.close()
+    print(f'Attachments List of Meeting {meeting_id}: ')
+
+
+
+    
+
 
 
     
