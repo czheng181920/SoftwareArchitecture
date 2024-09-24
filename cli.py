@@ -1,30 +1,31 @@
 import sqlite3
 import uuid
 import logic
+import re
 
 def main_menu():
     while True:
-      print("Welcome to the Meeting Management CLI")
-      print("Select an option to manage:")
-      print("1. Meetings")
-      print("2. Calendars")
-      print("3. Participants")
-      print("4. Attachments")
-      print("5. Exit")
-      choice = input("Enter your choice: ")
-      if choice == '1':
-          manage_meetings()
-      elif choice == '2':
-          manage_calendars()
-      elif choice == '3':
-          manage_participants()
-      elif choice == '4':
-          manage_attachments()
-      elif choice == '5':
-          exit()
-      else:
-          print("Invalid input. Please try again.")
-          main_menu()
+        print("\n \nWelcome to the Meeting Management CLI")
+        print("Select an option to manage:")
+        print("1. Meetings")
+        print("2. Calendars")
+        print("3. Participants")
+        print("4. Attachments")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            manage_meetings()
+        elif choice == '2':
+            manage_calendars()
+        elif choice == '3':
+            manage_participants() 
+        elif choice == '4':
+            manage_attachments()
+        elif choice == '5':
+            exit()
+        else:
+            print("Invalid input. Please try again.")
+            main_menu()
 
 # Input validation
 def get_input(prompt, validation_fn=None):
@@ -67,6 +68,11 @@ def create_meeting():
             break
         email = get_input("Enter participant email: ")
         
+        # validate email
+        while (not is_valid_email(email)):
+            print("Invalid email. Please enter a valid email.")
+            email = get_input("Enter participant email: ")
+        
         # Validate meeting ID before adding participant
         if not logic.db_check_meeting_id(meeting_id):
             print("Invalid meeting ID. Please enter a valid meeting ID.")
@@ -86,6 +92,29 @@ def create_meeting():
         logic.db_create_attachment(attachment_id, meeting_id, url)
         print(f"Attachment {url} added.")
 
+def list_calendar_by_meeting_ID():
+    meeting_id = get_input("Enter meeting_id to see the calendars that contain this meeting: ")
+
+    logic.db_list_calendars_by_meeting_ID(meeting_id)
+   
+def list_participants_by_meeting_ID():
+    meeting_id = get_input("Enter meeting_id to see the participants in this meeting: ")
+
+    logic.db_list_participants_by_meeting_ID(meeting_id)
+    
+def list_attachments_by_meeting_ID():
+    meeting_id = get_input("Enter meeting_id to see the attachments in this meeting: ")
+
+    logic.db_list_attachments_by_meeting_ID(meeting_id)
+
+def is_valid_email(email: str) -> bool:
+    # Regular expression for validating an email
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    
+    # Check if the email matches the regular expression
+    if re.match(email_regex, email):
+        return True
+    return False
 #neha
 def query_all_meetings():
     logic.db_query_all_meetings()
@@ -142,6 +171,11 @@ def delete_calendar():
     calendar_id = get_input("Enter calendar_id of calendar to be deleted: ")
 
     logic.db_delete_calendar(calendar_id)
+    
+def see_meetings_in_calendar():
+    calendar_id = get_input("Enter calendar_id of calendar to see meetings: ")
+
+    logic.db_see_meetings_in_calendar(calendar_id)
 
 def create_participant():
     meeting_id = get_input("Enter meeting ID: ")
@@ -153,6 +187,9 @@ def create_participant():
     
     name = get_input("Enter participant name: ")
     email = get_input("Enter participant email: ")
+    while (not is_valid_email(email)):
+            print("Invalid email. Please enter a valid email.")
+            email = get_input("Enter participant email: ")
     
     participant_id = generate_uuid()
 
@@ -171,6 +208,9 @@ def update_participant():
     participant_id = get_input("Enter participant ID: ")
     name = get_input("Enter new participant name: ")
     email = get_input("Enter new participant email: ")
+    while (not is_valid_email(email)):
+            print("Invalid email. Please enter a valid email.")
+            email = get_input("Enter participant email: ")
 
     logic.db_update_participant(participant_id, name, email)
 
@@ -220,6 +260,10 @@ def manage_meetings():
     print("3. Query Meeting by ID")
     print("4. Update Meeting")
     print("5. Delete Meeting")
+    print("6. List Calendars with Meeting ID")
+    print("7. List Participants in Meeting")
+    print("8. List Attatchments in Meeting")
+    
     
     choice = input("Enter your choice: ")
     if choice == '1':
@@ -232,6 +276,12 @@ def manage_meetings():
         update_meeting() 
     elif choice == '5':
         delete_meeting() 
+    elif choice == '6':
+        list_calendar_by_meeting_ID() 
+    elif choice == '7':
+        list_participants_by_meeting_ID()
+    elif choice == '8':
+        list_attachments_by_meeting_ID()
     else:
         print("Invalid input. Please try again.")
         manage_meetings()
@@ -244,6 +294,7 @@ def manage_calendars():
     print("3. Query Calendar by ID")
     print("4. Update Calendar")
     print("5. Delete Calendar")
+    print("6. See Meetings in Calendar")
     
     choice = input("Enter your choice: ")
     if choice == '1':
@@ -256,6 +307,8 @@ def manage_calendars():
         update_calendar()
     elif choice == '5':
         delete_calendar()
+    elif choice == '6':
+        see_meetings_in_calendar()
     else:
         print("Invalid input. Please try again.")
         manage_calendars()

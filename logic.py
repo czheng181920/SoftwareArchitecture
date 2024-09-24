@@ -76,6 +76,48 @@ def db_delete_meeting(meeting_id):
     print('Deleted Meeting!')
     print(f"Deleted Meeting {meeting_id}")
 
+def db_list_calendars_by_meeting_ID(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Meetings_Calendars WHERE meeting_id=?', (meeting_id,))
+    allCalendars = cursor.fetchall()
+
+    print('List of Calendar IDs that belong to this meeting:')
+    for calendar in allCalendars:
+        print(calendar[1])
+
+    connection.close()
+
+def  db_list_participants_by_meeting_ID(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Participants WHERE meeting_id=?', (meeting_id,))
+    allParticipants = cursor.fetchall()
+
+    print('List of Participants that belong to this meeting:')
+    for participant in allParticipants:
+        print(participant)
+
+    connection.close()
+    
+def db_list_attachments_by_meeting_ID(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Attachments WHERE meeting_id=?', (meeting_id,))
+    allAttachments = cursor.fetchall()
+
+    print('List of Attachments that belong to this meeting:')
+    for attachment in allAttachments:
+        print(attachment)
+
+    connection.close()
+
 def db_create_calendar(title, details):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
@@ -147,6 +189,20 @@ def db_delete_calendar(calendar_id):
     connection.close()
     print('Deleted Calendar!')
     print(f'Deleted Calendar {calendar_id}')
+    
+def db_see_meetings_in_calendar(calendar_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+    
+    cursor.execute('SELECT * FROM Meetings_Calendars WHERE calendar_id=?', (calendar_id,))
+    allMeetings = cursor.fetchall()
+    
+    print('List of Meeting IDs that belong to this calendar:')
+    for meeting in allMeetings:
+        print(meeting[0])
+
+    connection.close()
 
 #participant functions
 def db_create_participant(participant_id, meeting_id, name, email):
