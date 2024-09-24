@@ -168,6 +168,7 @@ def db_create_participant(participant_id, meeting_id, name, email):
 def db_check_meeting_id(meeting_id):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
     cursor.execute('SELECT 1 FROM Meetings WHERE meeting_id = ?', (meeting_id,))
     exists = cursor.fetchone() is not None
     connection.close()
@@ -222,7 +223,7 @@ def db_delete_participant(participant_id):
     print('Deleted Participant!')
 
 # attachment functions
-def db_create_participant(attachment_id, meeting_id, url):
+def db_create_attachment(attachment_id, meeting_id, url):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
 

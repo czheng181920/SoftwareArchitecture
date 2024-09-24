@@ -1,6 +1,7 @@
 import sqlite3
 import uuid
 import logic
+import re
 
 def main_menu():
     while True:
@@ -38,14 +39,20 @@ def get_input(prompt, validation_fn=None):
 def generate_uuid():
     return str(uuid.uuid4())
 
+
+def is_valid_email(email):
+    # Simple regex for validating an email
+    regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    return re.match(regex, email) is not None
+
 #chelsea
 def create_meeting():
-    title = get_input("Enter meeting title: ")
-    date_time = get_input("Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
-    location = get_input("Enter meeting location: ")
-    details = get_input("Enter meeting details: ")
+    title = input("Enter meeting title: ")
+    date_time = input("Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
+    location = input("Enter meeting location: ")
+    details = input("Enter meeting details: ")
 
-    meeting_id = generate_uuid()
+    meeting_id = str(uuid.uuid4())
     
     logic.db_create_meeting(meeting_id, title, date_time, location, details)
 
@@ -53,7 +60,7 @@ def create_meeting():
 
     # Prompt for associated calendars
     while True:
-        calendar_id = get_input("Enter associated calendar ID (or type 'done' to finish): ")
+        calendar_id = input("Enter associated calendar ID (or type 'done' to finish): ")
         if calendar_id.lower() == 'done':
             break
         logic.db_create_associated_calendar(meeting_id, calendar_id)
@@ -61,17 +68,17 @@ def create_meeting():
 
     # Prompt for participants
     while True:
-        participant_id = generate_uuid()
-        name = get_input("Enter participant name (or type 'done' to finish): ")
+        name = input("Enter participant name (or type 'done' to finish): ")
         if name.lower() == 'done':
             break
-        email = get_input("Enter participant email: ")
+        email = input("Enter participant email: ")
         
-        # Validate meeting ID before adding participant
-        if not logic.db_check_meeting_id(meeting_id):
-            print("Invalid meeting ID. Please enter a valid meeting ID.")
+        if not is_valid_email(email):
+            print("Invalid email format. Please enter a valid email.")
             continue
         
+        participant_id = str(uuid.uuid4())
+        print(f"Debug: Adding participant with meeting ID {meeting_id}")
         logic.db_create_participant(participant_id, meeting_id, name, email)
         print(f"Participant {name} added with ID: {participant_id}")
 
