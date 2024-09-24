@@ -182,7 +182,6 @@ def db_delete_calendar(calendar_id):
     cursor = connection.cursor()
     cursor.execute('PRAGMA foreign_keys = ON')
 
-    cursor.execute('DELETE FROM Calendars WHERE tcalendar_id=?', (calendar_id,))
     cursor.execute('DELETE FROM Calendars WHERE calendar_id=?', (calendar_id,))
 
     connection.commit()
