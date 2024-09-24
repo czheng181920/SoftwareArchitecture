@@ -1,6 +1,6 @@
 import sqlite3
 import uuid
-from logic import db_create_meeting, db_create_associated_calendar, db_create_participant, db_create_attachment
+import logic
 
 def main_menu():
     while True:
@@ -47,7 +47,7 @@ def create_meeting():
 
     meeting_id = generate_uuid()
     
-    db_create_meeting(meeting_id, title, date_time, location, details)
+    logic.db_create_meeting(meeting_id, title, date_time, location, details)
 
     print(f"Meeting created with ID: {meeting_id}")
 
@@ -56,19 +56,24 @@ def create_meeting():
         calendar_id = get_input("Enter associated calendar ID (or type 'done' to finish): ")
         if calendar_id.lower() == 'done':
             break
-        db_create_associated_calendar(meeting_id, calendar_id)
+        logic.db_create_associated_calendar(meeting_id, calendar_id)
         print(f"Associated calendar {calendar_id} added.")
 
     # Prompt for participants
     while True:
-        participant_id = get_input("Enter participant ID (or type 'done' to finish): ")
-        if participant_id.lower() == 'done':
+        participant_id = generate_uuid()
+        name = get_input("Enter participant name (or type 'done' to finish): ")
+        if name.lower() == 'done':
             break
-        name = get_input("Enter participant name: ")
         email = get_input("Enter participant email: ")
-
-        db_create_participant(participant_id, meeting_id, name, email)
-        print(f"Participant {name} added.")
+        
+        # Validate meeting ID before adding participant
+        if not logic.db_check_meeting_id(meeting_id):
+            print("Invalid meeting ID. Please enter a valid meeting ID.")
+            continue
+        
+        logic.db_create_participant(participant_id, meeting_id, name, email)
+        print(f"Participant {name} added with ID: {participant_id}")
 
     # Prompt for attachments
     while True:
@@ -78,7 +83,7 @@ def create_meeting():
 
         attachment_id = generate_uuid()  # Generate UUID for the attachment
 
-        db_create_attachment(attachment_id, meeting_id, attachment_url)
+        logic.db_create_attachment(attachment_id, meeting_id, attachment_url)
         print(f"Attachment {attachment_url} added.")
 
 #neha
@@ -116,19 +121,40 @@ def delete_calendar():
     print("Deleting a calendar... (to be implemented later)")
 
 def create_participant():
-    print("Creating a new participant... (to be implemented later)")
+    meeting_id = get_input("Enter meeting ID: ")
+    
+    # Validate meeting ID
+    if not logic.db_check_meeting_id(meeting_id):
+        print("Invalid meeting ID. Please enter a valid meeting ID.")
+        return
+    
+    name = get_input("Enter participant name: ")
+    email = get_input("Enter participant email: ")
+    
+    participant_id = generate_uuid()
+
+    logic.db_create_participant(participant_id, meeting_id, name, email)
+
+    print(f"Participant created with ID: {participant_id}")
 
 def query_all_participants():
-    print("Querying all participants... (to be implemented later)")
+    logic.db_query_all_participants()
 
 def query_participant_by_id():
-    print("Querying participant by ID... (to be implemented later)")
+    participant_id = get_input("Enter participant ID: ")
+    logic.db_query_participant_by_id(participant_id)
 
 def update_participant():
-    print("Updating a participant... (to be implemented later)")
+    participant_id = get_input("Enter participant ID: ")
+    name = get_input("Enter new participant name: ")
+    email = get_input("Enter new participant email: ")
+
+    logic.db_update_participant(participant_id, name, email)
+
 
 def delete_participant():
-    print("Deleting a participant... (to be implemented later)")
+    participant_id = get_input("Enter participant ID: ")
+    logic.db_delete_participant(participant_id)
 
 def create_attachment():
     print("Creating a new attachment... (to be implemented later)")
