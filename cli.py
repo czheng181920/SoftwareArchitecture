@@ -88,37 +88,60 @@ def create_meeting():
 
 #neha
 def query_all_meetings():
-    print("Querying all meetings... (to be implemented later)")
-
-
+    logic.db_query_all_meetings()
+#neha 
 def query_meeting_by_id():
-    print("Querying meeting by ID... (to be implemented later)")
+    meeting_id = get_input("Enter meeting_id of meeting to be found: ")
 
+    logic.db_query_meeting_by_id(meeting_id)
 
+#neha
 def update_meeting():
-    print("Updating a meeting... (to be implemented later)")
+    meeting_id = get_input("Enter meeting_id of meeting to be updated: ")
+    title = get_input("Enter updated meeting title: ")
+    date_time = get_input("Enter updated meeting date and time (YYYY-MM-DD HH:MM AM/PM): ")
+    location = get_input("Enter updated meeting location: ")
+    details = get_input("Enter updated meeting details: ")
+
+    logic.db_update_meeting(meeting_id, title, date_time, location, details)
 
 #neha
 def delete_meeting():
-    print('Deleted Meeting!')
+    meeting_id = get_input("Enter meeting_id of meeting to be deleted: ")
 
+    logic.db_delete_meeting(meeting_id)
 
+#amala
 def create_calendar():
-    print("Creating a new calendar... (to be implemented later)")
+    title = get_input("Enter calendar title: ")
+    details = get_input("Enter details: ")
+
+    logic.db_create_calendar(title, details)
 
 #amala
 def query_all_calendars():
-    print("Querying all calendars... (to be implemented later)")
+    logic.db_find_all_calendar()
 
+#amala
 def query_calendar_by_id():
-    print("Querying calendar by ID... (to be implemented later)")
+    calendar_id = get_input("Enter calendar_id of calendar to be found: ")
 
+    logic.db_query_calendar_by_id(calendar_id)
+    
+#amala
 def update_calendar():
-    print("Updating a calendar... (to be implemented later)")
+    calendar_id = get_input("Enter calendar_id of calendar to be found: ")
+
+    title = get_input("Enter calendar title: ")
+    details = get_input("Enter details: ")
+
+    logic.db_update_calendar(calendar_id, title, details)
 
 #amala
 def delete_calendar():
-    print("Deleting a calendar... (to be implemented later)")
+    calendar_id = get_input("Enter calendar_id of calendar to be deleted: ")
+
+    logic.db_delete_calendar(calendar_id)
 
 def create_participant():
     meeting_id = get_input("Enter meeting ID: ")

@@ -29,6 +29,37 @@ def db_query_all_meetings():
     cursor.execute('SELECT * FROM Meetings')
     allMeetings = cursor.fetchall()
 
+    print('All Meetings:')
+    for meeting in allMeetings:
+        print(meeting)
+
+    connection.close()
+
+def db_query_meeting_by_id(meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Meetings WHERE meeting_id=?', (meeting_id,))
+    allMeetings = cursor.fetchall()
+    
+    print('Meeting found:')
+    for meeting in allMeetings:
+        print(meeting)
+
+    connection.close()
+
+def db_update_meeting(meeting_id, title, date_time, location, details):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('UPDATE Users SET title=?, date_time=?, location=?, details=? WHERE meeting_id=?', 
+                   (title, date_time, location, details, meeting_id))
+    
+    allMeetings = cursor.fetchall()
+    
+    print('Meeting updated:')
     for meeting in allMeetings:
         print(meeting)
 
@@ -44,6 +75,7 @@ def db_delete_meeting(meeting_id):
     connection.commit()
     connection.close()
     print('Deleted Meeting!')
+    print(f"Deleted Meeting {meeting_id}")
 
 def db_create_calendar(title, details):
     connection = sqlite3.connect(database)
@@ -74,16 +106,48 @@ def db_find_all_calendar():
 
     connection.close()
 
+def db_query_calendar_by_id(calendar_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Calendars WHERE calendar_id=?', (calendar_id,))
+    calendar = cursor.fetchall()
+
+    print('Calendar found:')
+    for c in calendar:
+        print(c)
+
+    connection.close()
+
+def db_update_calendar(calendar_id, title, details):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('UPDATE Users SET title=?, details=? WHERE calendar_id=?', 
+                   (title, details, calendar_id))
+    
+    allCalendars = cursor.fetchall()
+    
+    print('Calendar updated:')
+    for c in allCalendars:
+        print(c)
+
+    connection.close()
+
 def db_delete_calendar(calendar_id):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
     cursor.execute('PRAGMA foreign_keys = ON')
 
     cursor.execute('DELETE FROM Calendars WHERE tcalendar_id=?', (calendar_id,))
+    cursor.execute('DELETE FROM Calendars WHERE calendar_id=?', (calendar_id,))
 
     connection.commit()
     connection.close()
     print('Deleted Calendar!')
+    print(f'Deleted Calendar {calendar_id}')
 
 def db_create_associated_calendar(meeting_id, calendar_id):
     print("(to be implemented later)")
