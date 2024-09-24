@@ -46,7 +46,7 @@ def createTable(database):
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Participants (
         participant_id TEXT PRIMARY KEY,
-        meeting_id TEXT,
+        meeting_id TEXT NOT NULL,
         name TEXT NOT NULL CHECK(length(name) <= 600),
         email TEXT NOT NULL,
         FOREIGN KEY (meeting_id) REFERENCES Meetings(meeting_id) ON DELETE CASCADE,
