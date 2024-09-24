@@ -122,7 +122,7 @@ def create_calendar():
     title = get_input("Enter calendar title: ")
     details = get_input("Enter details: ")
 
-    logic.db_create_calendar(title, details)
+    logic.db_create_calendar(calendar_id, title, details)
 
 #amala
 def query_all_calendars():
@@ -222,6 +222,19 @@ def delete_attachment():
     attachment_id = get_input("Enter attachment ID: ")
     logic.db_delete_attachment(attachment_id)
 
+
+#manage meetings in calendar
+def delete_meeting_calendar():
+    calendar_id = get_input("Enter calendar_id of calendar for meeting to be deleted: ")
+    meeting_id = get_input(f"Enter meeting_id of meeting from calendar {calendar_id} to be deleted: ")
+    logic.db_delete_meeting_calendar(calendar_id,meeting_id)
+
+def add_meeting_calendar():
+    calendar_id = get_input("Enter calendar_id of calendar for meeting to be added: ")
+    meeting_id = get_input(f"Enter meeting_id of meeting from calendar {calendar_id} to be added: ")
+    logic.db_create_associated_calendar_meeting(calendar_id, meeting_id)
+    
+
 def manage_meetings():
     print("\nManage Meetings")
     print("Select an option:")
@@ -254,6 +267,8 @@ def manage_calendars():
     print("3. Query Calendar by ID")
     print("4. Update Calendar")
     print("5. Delete Calendar")
+    print("6. Delete Meeting from Calendar")
+    print("7. Add Meeting to Calender")
     
     choice = input("Enter your choice: ")
     if choice == '1':
@@ -266,6 +281,11 @@ def manage_calendars():
         update_calendar()
     elif choice == '5':
         delete_calendar()
+    elif choice == '6':
+        delete_meeting_calendar()
+    elif choice == '7':
+        add_meeting_calendar()
+        
     else:
         print("Invalid input. Please try again.")
         manage_calendars()

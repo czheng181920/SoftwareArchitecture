@@ -56,12 +56,7 @@ def db_update_meeting(meeting_id, title, date_time, location, details):
     cursor.execute('UPDATE Meetings SET title=?, date_time=?, location=?, details=? WHERE meeting_id=?', 
                    (title, date_time, location, details, meeting_id))
     
-    allMeetings = cursor.fetchall()
-    
-    print('Meeting updated:')
-    for meeting in allMeetings:
-        print(meeting)
-
+    print(f'Meeting updated: {meeting_id}')
     connection.close()
 
 def db_delete_meeting(meeting_id):
@@ -111,7 +106,7 @@ def db_query_calendar_by_id(calendar_id):
     cursor.execute('SELECT * FROM Calendars WHERE calendar_id=?', (calendar_id,))
     calendar = cursor.fetchall()
 
-    print('Calendar found:')
+    print(f'Calendar found: {calendar_id}')
     for c in calendar:
         print(c)
 
@@ -125,13 +120,10 @@ def db_update_calendar(calendar_id, title, details):
     cursor.execute('UPDATE Calendars SET title=?, details=? WHERE calendar_id=?', 
                    (title, details, calendar_id))
     
-    allCalendars = cursor.fetchall()
-    
-    print('Calendar updated:')
-    for c in allCalendars:
-        print(c)
-
+    print(f'Calendar updated: {calendar_id}')
     connection.close()
+
+
 
 def db_delete_calendar(calendar_id):
     connection = sqlite3.connect(database)
@@ -205,7 +197,7 @@ def db_update_participant(participant_id, name, email):
 
     connection.commit()
     connection.close()
-    print('Updated Participant!')
+    print(f'Updated Participant! {participant_id}')
 
 def db_delete_participant(participant_id):
     connection = sqlite3.connect(database)
@@ -271,7 +263,7 @@ def db_update_attachment(attachment_id, url):
 
     connection.commit()
     connection.close()
-    print('Updated Attachment!')
+    print(f'Updated Attachment! {attachment_id}')
 
 def db_delete_attachment(attachment_id):
     connection = sqlite3.connect(database)
@@ -299,3 +291,18 @@ def db_create_associated_calendar_meeting(meeting_id, calendar_id):
 
     connection.commit()
     connection.close()
+
+def db_delete_meeting_calendar(calendar_id, meeting_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('DELETE FROM Meetings_Calendars WHERE calendar_id=? AND meeting_id=?', (calendar_id, meeting_id))
+
+    connection.commit()
+    connection.close()
+    print(f'Deleted Meeting {meeting_id} from Calendar {calendar_id}')
+
+
+    
