@@ -149,16 +149,6 @@ def db_delete_calendar(calendar_id):
     print('Deleted Calendar!')
     print(f'Deleted Calendar {calendar_id}')
 
-def db_create_associated_calendar(meeting_id, calendar_id):
-    print("(to be implemented later)")
-
-def db_create_participant(participant_id, meeting_id, name, email):
-    print("(to be implemented later)")
-
-def db_create_attachment(attachment_id, meeting_id, attachment_url):
-    print("(to be implemented later)")
-
-
 #participant functions
 def db_create_participant(participant_id, meeting_id, name, email):
     connection = sqlite3.connect(database)
@@ -231,3 +221,66 @@ def db_delete_participant(participant_id):
     connection.close()
     print('Deleted Participant!')
 
+# attachment functions
+def db_create_participant(attachment_id, meeting_id, url):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('''
+        INSERT INTO Attachments (attachment_id, meeting_id, url) 
+        VALUES (?, ?, ?);
+    ''', (attachment_id, meeting_id, url))
+    print('Added Participant!')
+
+    connection.commit()
+    connection.close()
+    
+def db_query_all_attachments():
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Attachments')
+    allAttachments = cursor.fetchall()
+
+    for attachment in allAttachments:
+        print(attachment)
+
+    connection.close()
+    
+def db_query_attachment_by_id(attachment_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('SELECT * FROM Attachments WHERE attachment_id=?', (attachment_id,))
+    attachment = cursor.fetchone()
+
+    print(attachment)
+
+    connection.close()
+
+def db_update_attachment(attachment_id, url):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('UPDATE Attachments SET url=? WHERE attachment_id=?', (url, attachment_id))
+
+    connection.commit()
+    connection.close()
+    print('Updated Attachment!')
+
+def db_delete_attachment(attachment_id):
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA foreign_keys = ON')
+
+    cursor.execute('DELETE FROM Attachments WHERE attachment_id=?', (attachment_id,))
+
+    connection.commit()
+    connection.close()
+    print('Deleted Participant!')
