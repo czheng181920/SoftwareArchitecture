@@ -45,7 +45,7 @@ def createTable(database):
     # Create Participants table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Participants (
-        participant_clead TEXT PRIMARY KEY,
+        participant_id TEXT PRIMARY KEY,
         meeting_id TEXT NOT NULL,
         name TEXT NOT NULL CHECK(length(name) <= 600),
         email TEXT NOT NULL,
