@@ -1,4 +1,3 @@
-import sqlite3
 import uuid
 import logic
 import re
@@ -280,7 +279,7 @@ def delete_meeting_calendar():
 def add_meeting_calendar():
     calendar_id = get_input("Enter calendar_id of calendar for meeting to be added: ")
     meeting_id = get_input(f"Enter meeting_id of meeting from calendar {calendar_id} to be added: ")
-    logic.db_create_associated_calendar_meeting(calendar_id, meeting_id)
+    logic.db_create_associated_calendar_meeting(meeting_id, calendar_id)
 
 
 #meetings and their lists

@@ -1,7 +1,6 @@
 # All of these functions are placeholders for the actual implementation.
 # Must also edit cli.py to import the user input for the required functions
 import sqlite3
-import uuid
 
 database = 'calendar.db'
 
@@ -164,8 +163,6 @@ def db_update_calendar(calendar_id, title, details):
     print(f'Calendar updated: {calendar_id}')
     connection.close()
 
-
-
 def db_delete_calendar(calendar_id):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
@@ -277,8 +274,7 @@ def db_create_attachment(attachment_id, meeting_id, url):
         INSERT INTO Attachments (attachment_id, meeting_id, url) 
         VALUES (?, ?, ?);
     ''', (attachment_id, meeting_id, url))
-    print('Added Participant!')
-
+    print('Added Attachment!')
 
     connection.commit()
     connection.close()
@@ -333,19 +329,32 @@ def db_delete_attachment(attachment_id):
     
 #create a calendar-meeting relationship
 def db_create_associated_calendar_meeting(meeting_id, calendar_id):
+
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
     cursor.execute('PRAGMA foreign_keys = ON')
 
+    # Verify that the meeting and calendar IDs exist before the insert
+    cursor.execute('SELECT * FROM Meetings WHERE meeting_id = ?', (meeting_id,))
+    meeting = cursor.fetchone()
+    cursor.execute('SELECT * FROM Calendars WHERE calendar_id = ?', (calendar_id,))
+    calendar = cursor.fetchone()
+
+    if meeting is None:
+        raise ValueError(f"Meeting with ID {meeting_id} does not exist.")
+    if calendar is None:
+        raise ValueError(f"Calendar with ID {calendar_id} does not exist.")
+
+    # Insert the association into the table
     cursor.execute('''
         INSERT INTO Meetings_Calendars (meeting_id, calendar_id) 
         VALUES (?, ?);
     ''', (meeting_id, calendar_id))
+
     print('Added Meeting to Calendar!')
 
     connection.commit()
-    connection.close()
 
 def db_delete_meeting_calendar(calendar_id, meeting_id):
     connection = sqlite3.connect(database)
