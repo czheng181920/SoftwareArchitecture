@@ -161,6 +161,8 @@ def db_update_calendar(calendar_id, title, details):
                    (title, details, calendar_id))
     
     print(f'Calendar updated: {calendar_id}')
+
+    connection.commit()
     connection.close()
 
 def db_delete_calendar(calendar_id):
@@ -355,6 +357,7 @@ def db_create_associated_calendar_meeting(meeting_id, calendar_id):
     print('Added Meeting to Calendar!')
 
     connection.commit()
+    connection.close()
 
 def db_delete_meeting_calendar(calendar_id, meeting_id):
     connection = sqlite3.connect(database)
@@ -425,13 +428,13 @@ def db_calendar_list_meeting(calendar_id):
     cursor.execute('SELECT meeting_id FROM Meetings_Calendars WHERE calendar_id=?', (calendar_id,))
 
     allMeetings = cursor.fetchall()
+
+    print(f'Meeting List for Calendar {calendar_id}: ')
     for m in allMeetings:
         print(m)
 
     connection.commit()
     connection.close()
-    print(f'Meeting List for Calendar {calendar_id}: ')
-
     
 
 
