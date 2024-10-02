@@ -1,0 +1,41 @@
+from flask import Flask, render_template, render_template, jsonify, request
+import requests
+from dotenv import load_dotenv
+import os
+
+app = Flask(__name__)
+
+#load enviornmental variables from .env file
+load_dotenv()
+
+# Get Business Layer IP
+BUSINESS_LAYER_IP = os.getenv('BUSINESS_LAYER_IP')
+
+# serve the index.html file
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# Endpoint to handle requests from the HTML page
+@app.route('/submit', methods=['POST'])
+def submit():
+    data = request.get_json()
+    
+    # Send the data to the Business Layer (replace with Business Layer IP)
+    # url = 'http://{BUSINESS_LAYER_IP}:5001/process'
+    # response = requests.post(url, json=data)
+    #print to the console
+    print("Data sent to Business Layer")
+    
+    # Simulate a fake response from the Business Layer
+    response = send_to_business_layer(data)
+    
+    return jsonify({"message": "Data sent to Business Layer", "response": response})
+
+def send_to_business_layer(data):
+    url = 'http://{BUSINESS_LAYER_IP}:5001/process'
+    response = requests.post(url, json=data)
+    return response.text
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug = True)

@@ -1,0 +1,27 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Flask App</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </head>
+  <body>
+    <h1>Hello, Flask!</h1>
+    <p>This is a simple Flask web application.</p>
+    <h1>Enter Data</h1>
+    <form id="data-form">
+      <label for="info">Data:</label>
+      <input type="text" id="info" name="info" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="response"></p>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
