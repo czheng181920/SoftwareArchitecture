@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Flask App</title>
+    <title>Meeting Management Web App</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
@@ -12,14 +12,59 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </head>
   <body>
-    <h1>Hello, Flask!</h1>
-    <p>This is a simple Flask web application.</p>
-    <h1>Enter Data</h1>
-    <form id="data-form">
-      <label for="info">Data:</label>
-      <input type="text" id="info" name="info" />
-      <button type="submit">Submit</button>
+   <div id="datastuff">
+      <h1>Enter Data</h1>
+      <form id="data-form">
+        <label for="info">Data:</label>
+        <input type="text" id="info" name="info" />
+        <button type="submit">Submit</button>
+      </form>
+   </div> 
+  
+  <div id="meetingTitle"> 
+      <h1>Meeting Management</h1>
+      <form id="optionForm">
+        <label for="choice">Select an option to manage:</label>
+        <select id="choice" name="choice">
+            <option value="1">Meetings</option>
+            <option value="2">Calendars</option>
+            <option value="3">Participants</option>
+            <option value="4">Attachments</option>
+        </select>
+        <button type="submit">Submit</button>
     </form>
+  </div>
+  
+  <!-- based on option selected show the right form; otherwise disable all for now -->
+  <!--meeting manage-->
+  <form>
+    <label for="meeting-option">Select an option:</label>
+    <select id="meeting-option" name="meeting-option">
+        <option value="1">Create Meeting</option>
+        <option value="2">Query All Meetings</option>
+        <option value="3">Query Meeting by ID</option>
+        <option value="4">Update Meeting</option>
+        <option value="5">Delete Meeting</option>
+        <option value="6">List of Calendars for a Meeting</option>
+        <option value="7">List of Participants for a Meeting</option>
+        <option value="8">List of Attachments for a Meeting</option>
+    </select>
+    <button type="submit">Submit</button>
+</form>
+
+<div id="meeting-form">
+  <label for="meeting-id">Enter meeting ID (or type 'done' to finish):</label>
+  <input type="text" id="meeting-id" name="meeting-id">
+  <label for="title">Enter meeting title:</label>
+  <input type="text" id="title" name="title">
+  <label for="date-time">Enter meeting date and time (YYYY-MM-DD HH:MM AM/PM):</label>
+  <input type="text" id="date-time" name="date-time">
+  <label for="location">Enter meeting location:</label>
+  <input type="text" id="location" name="location">
+  <label for="details">Enter meeting details:</label>
+  <textarea id="details" name="details"></textarea>
+  <button type="submit">Submit</button>
+</div>
 
     <p id="response"></p>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
