@@ -26,6 +26,7 @@ def submit():
     return jsonify({"message": "Data sent to Business Layer", "response": response})
 
 def send_to_business_layer(data):
+    #TODO: this should theoretically work but still needs to be tested and debugged between two machines 
     url = 'http://{BUSINESS_LAYER_IP}:5001/process'
     response = requests.post(url, json=data)
     return response.text
