@@ -20,14 +20,7 @@ def home():
 @app.route('/submit', methods=['POST'])
 def submit():
     data = request.get_json()
-    
-    # Send the data to the Business Layer (replace with Business Layer IP)
-    # url = 'http://{BUSINESS_LAYER_IP}:5001/process'
-    # response = requests.post(url, json=data)
-    #print to the console
     print("Data sent to Business Layer")
-    
-    # Simulate a fake response from the Business Layer
     response = send_to_business_layer(data)
     
     return jsonify({"message": "Data sent to Business Layer", "response": response})
