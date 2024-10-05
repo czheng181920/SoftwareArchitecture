@@ -224,6 +224,61 @@ def delete_participant(participant_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def execute_db_function(db_function, *args):
+    try:
+        db_function(*args)
+        return jsonify({"message": "Success"}), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": "An error occurred: " + str(e)}), 500
+
+@app.route('/attachments/<int:attachment_id>', methods=['DELETE'])
+def delete_attachment(attachment_id):
+    return execute_db_function(db.db_delete_attachment, attachment_id)
+
+@app.route('/associate', methods=['POST'])
+def create_associated_calendar_meeting():
+    data = request.json
+    meeting_id = data.get('meeting_id')
+    calendar_id = data.get('calendar_id')
+    return execute_db_function(db.db_create_associated_calendar_meeting, meeting_id, calendar_id)
+
+@app.route('/meetings/<int:meeting_id>/calendars/<int:calendar_id>', methods=['DELETE'])
+def delete_meeting_calendar(calendar_id, meeting_id):
+    return execute_db_function(db.db_delete_meeting_calendar, calendar_id, meeting_id)
+
+@app.route('/meetings/<int:meeting_id>/calendars', methods=['GET'])
+def list_calendars_for_meeting(meeting_id):
+    try:
+        calendars = db.db_meeting_list_calendar(meeting_id)
+        return jsonify({"calendars": calendars}), 200
+    except Exception as e:
+        return jsonify({"error": "An error occurred: " + str(e)}), 500
+
+@app.route('/meetings/<int:meeting_id>/participants', methods=['GET'])
+def list_participants_for_meeting(meeting_id):
+    try:
+        participants = db.db_participant_list_calendar(meeting_id)
+        return jsonify({"participants": participants}), 200
+    except Exception as e:
+        return jsonify({"error": "An error occurred: " + str(e)}), 500
+
+@app.route('/meetings/<int:meeting_id>/attachments', methods=['GET'])
+def list_attachments_for_meeting(meeting_id):
+    try:
+        attachments = db.db_attachment_list_calendar(meeting_id)
+        return jsonify({"attachments": attachments}), 200
+    except Exception as e:
+        return jsonify({"error": "An error occurred: " + str(e)}), 500
+
+@app.route('/calendars/<int:calendar_id>/meetings', methods=['GET'])
+def list_meetings_for_calendar(calendar_id):
+    try:
+        meetings = db.db_calendar_list_meeting(calendar_id)
+        return jsonify({"meetings": meetings}), 200
+    except Exception as e:
+        return jsonify({"error": "An error occurred: " + str(e)}), 500
 #TODO: add endpoints for attatchments 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002)
