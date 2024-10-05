@@ -9,7 +9,8 @@ app = Flask(__name__)
 load_dotenv()
 
 # Get Business Layer IP
-BUSINESS_LAYER_IP = os.getenv('BUSINESS_LAYER_IP')
+#TODO: need to change this in template.env
+BUSINESS_LAYER_IP = os.getenv('BUSINESS_LAYER_IP') 
 
 # serve the index.html file
 @app.route('/')

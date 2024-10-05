@@ -46,8 +46,6 @@ def is_valid_email(email):
 
 #chelsea
 def create_meeting():
-
-
     #user can make their own meeting id
     meeting_id = get_input("Enter meeting ID (or type 'done' to finish): ")
     if meeting_id.lower() == 'done':
