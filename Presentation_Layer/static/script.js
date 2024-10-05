@@ -62,3 +62,92 @@ function handleMeetingOptionChange() {
   }
 }
 
+// Function to handle changes in the calendar management options
+function handleCalendarOptionChange() {
+  const selectedCalendarOption = document.getElementById("calendar-option").value;
+  
+  const calendarIdSection = document.getElementById("calendar-id-section");
+  const calendarTitleSection = document.getElementById("calendar-title-section");
+  const calendarDetailsSection = document.getElementById("calendar-details-section");
+
+  // Display the meeting ID input field only for options that require it
+  if (selectedCalendarOption === "1" || selectedCalendarOption === "4") {
+    // Creating or querying all meetings does not require a meeting ID
+    calendarIdSection.style.display = "block";  
+    calendarTitleSection.style.display = "block";    
+    calendarDetailsSection.style.display = "block";    
+  } 
+  else if (selectedCalendarOption === "2") {
+    // Creating or querying all meetings does not require a meeting ID
+    calendarIdSection.style.display = "none";
+    calendarTitleSection.style.display = "none";       
+    calendarDetailsSection.style.display = "none";     
+  } else {
+    // Other options (query by ID, update, delete) require a meeting ID
+    calendarIdSection.style.display = "block";
+    calendarTitleSection.style.display = "none";   
+    calendarDetailsSection.style.display = "none";    
+  }
+}
+
+// Function to handle changes in the participant management options
+function handleParticipantOptionChange() {
+  const selectedParticipantOption = document.getElementById("participant-option").value;
+  
+  const participantIdSection = document.getElementById("participant-id-section");
+  const meetingIdSection = document.getElementById("meeting-id-section");
+  const participantNameSection = document.getElementById("participant-name-section");
+  const participantEmailSection = document.getElementById("participant-email-section");
+
+  // Display the meeting ID input field only for options that require it
+  if (selectedParticipantOption === "1" || selectedParticipantOption === "4") {
+    // Creating or querying all meetings does not require a meeting ID
+    participantIdSection.style.display = "block";  
+    meetingIdSection.style.display = "block";  
+    participantNameSection.style.display = "block";    
+    participantEmailSection.style.display = "block";    
+  } 
+  else if (selectedParticipantOption === "2") {
+    // Creating or querying all meetings does not require a meeting ID
+    participantIdSection.style.display = "none";
+    participantNameSection.style.display = "none";       
+    participantEmailSection.style.display = "none";  
+    meetingIdSection.style.display = "none";     
+  } else {
+    // Other options (query by ID, update, delete) require a meeting ID
+    participantIdSection.style.display = "block";
+    participantNameSection.style.display = "none";   
+    participantEmailSection.style.display = "none"; 
+    meetingIdSection.style.display = "none";     
+  }
+}
+
+// Function to handle changes in the attachment management options
+function handleAttachmentOptionChange() {
+  const selectedAttachmentOption = document.getElementById("attachment-option").value;
+  
+  const attachmentIdSection = document.getElementById("attachment-id-section");
+  const meetingIdSection = document.getElementById("meeting-id-section");
+  const attachmentUrlSection = document.getElementById("attachment-url-section");
+
+  // Display the meeting ID input field only for options that require it
+  if (selectedAttachmentOption === "1" || selectedAttachmentOption === "4") {
+    // Creating or querying all meetings does not require a meeting ID
+    attachmentIdSection.style.display = "block";  
+    meetingIdSection.style.display = "block";  
+    attachmentUrlSection.style.display = "block";    
+  } 
+  else if (selectedAttachmentOption === "2") {
+    // Creating or querying all meetings does not require a meeting ID
+    attachmentIdSection.style.display = "none";
+    meetingIdSection.style.display = "none";  
+    attachmentUrlSection.style.display = "none";       
+  } else {
+    // Other options (query by ID, update, delete) require a meeting ID
+    attachmentIdSection.style.display = "block";
+    meetingIdSection.style.display = "none";  
+    attachmentUrlSection.style.display = "none";   
+  }
+}
+
+
