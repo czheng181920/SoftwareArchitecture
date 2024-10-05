@@ -1,7 +1,6 @@
-from flask import Flask, request
 import sqlite3
-import jsonify
-import db
+from flask import Flask, request, jsonify
+import logic as db
 
 app = Flask(__name__)
 
