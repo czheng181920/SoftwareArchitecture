@@ -131,7 +131,7 @@ def addCalendar():
 
 @app.route('/allCalendar', methods=['GET'])
 def getCalendar():
-    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar' 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendars' 
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -151,9 +151,15 @@ def findCalendar():
 @app.route('/updateCalendar', methods=['PUT'])
 def updateCalendar():
     data = request.get_json()
+    title = data.get('calendar_title')
+    details = data.get('calendar_details')
+
     calendar_id = data.get('calendar_id')
     url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/{calendar_id}'
-    response = requests.put(url, data)
+    response = requests.put(url, json={
+        "calendar_title": title,
+        "calendar_details": details
+    })
     return jsonify(response.json()), response.status_code
 
 @app.route('/deleteCalendar', methods=['DELETE'])

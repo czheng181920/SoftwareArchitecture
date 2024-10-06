@@ -131,22 +131,21 @@ function handleCalendarOptionChange()
 
   calendarSubmitButton.onclick = function() 
   {
-    if (selectedMeetingOption === "1") 
+    if (selectedCalendarOption === "1") 
     {
       addCalendar();
-    } else if (selectedMeetingOption === "2") {
+    } else if (selectedCalendarOption === "2") {
       allCalendar();
-    } else if (selectedMeetingOption === "3") {
+    } else if (selectedCalendarOption === "3") {
       findCalendarById()
-    } else if (selectedMeetingOption === "4") {
+    } else if (selectedCalendarOption === "4") {
       updateCalendar();
-    } else if (selectedMeetingOption === "5") {
+    } else if (selectedCalendarOption === "5") {
       deleteCalendar();
-    } else if (selectedMeetingOption === "6") {
+    } else if (selectedCalendarOption === "6") {
       allMeetinginCalendar();
     }
   };
-
 
 }
 
@@ -463,7 +462,7 @@ async function allCalendar()
 {
   try 
   {
-    const response = await fetch('/allCalendars', 
+    const response = await fetch('/allCalendar', 
       {
       method: 'GET'
     });
@@ -530,16 +529,85 @@ async function findCalendarById()
 
 async function updateCalendar()
 {
+  const calendarID = document.getElementById("calendar-id").value;
+  const calendarTitle = document.getElementById("calendar-title").value;
+  const calendarDetails = document.getElementById("calendar-details").value; 
+
+    // Create JSON object
+    const data = {
+      calendar_id: calendarID,
+      calendar_title: calendarTitle,  
+      calendar_details: calendarDetails
+      };
+
+    try {
+        const response = await fetch('/updateCalendar', 
+          {
+            method: 'PUT',
+            headers: 
+            {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) 
+          {
+            const updatedCalendar= await response.json();
+            console.log('Updated Calendar:', updatedCalendar);
+        } 
+        else 
+        {
+            console.error('Error updating calendar:', response.status);
+        }
+    } 
+    catch (error) 
+    {
+        console.error('Error:', error);
+    }
+
 
 }
 
 async function deleteCalendar()
 {
+  const meetingID = document.getElementById("calendar-id").value; 
+
+  const data = {
+      calendar_id: calendarID
+  };
+
+  try {
+      const response = await fetch('/deleteCalendar', {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+      });
+
+      if (response.ok) 
+      {
+          const result = await response.json();
+          console.log('Calendar deleted successfully:', result.message);
+      } 
+      else 
+      {
+          console.error('Error deleting calendar:', response.status);
+      }
+  } 
+  catch (error) 
+  {
+      console.error('Error:', error);
+  }
+
+
 
 }
 
 async function allMeetinginCalendar()
 {
+  
 
 }
 
