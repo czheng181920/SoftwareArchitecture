@@ -267,7 +267,32 @@ async function meetingQuery()
 
 async function meetingQueryByID()
 {
+  const meetingID = document.getElementById("meeting-id").value;
 
+  // Create JSON object
+  const data = {
+    meeting_id: meetingID
+  };
+    
+  try {
+      const response = await fetch('/meetingByID', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.ok) {
+        const meetingData = await response.json();
+        console.log('Meeting retrieved successfully:', meetingData);
+        // Handle retrieved meeting data, e.g., display in UI
+      } 
+      else {
+        console.error('Error retrieving meeting:', response.status);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
 
 }
 
@@ -290,24 +315,31 @@ async function updateMeeting()
       };
 
     try {
-        const response = await fetch('/updateMeeting', {
+        const response = await fetch('/updateMeeting', 
+          {
             method: 'PUT',
-            headers: {
+            headers: 
+            {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data), // Assuming updatedData is an object with updated fields
         });
 
-        if (response.ok) {
+        if (response.ok) 
+          {
             const updatedMeeting = await response.json();
             console.log('Updated Meeting:', updatedMeeting);
 
             // Optionally, display a success message or update the UI accordingly
             alert('Meeting updated successfully!');
-        } else {
+        } 
+        else 
+        {
             console.error('Error updating meeting:', response.status);
         }
-    } catch (error) {
+    } 
+    catch (error) 
+    {
         console.error('Error:', error);
     }
 }
