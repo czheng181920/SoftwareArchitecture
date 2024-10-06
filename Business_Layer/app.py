@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # data layer server IP address and port
 # TODO: test this with the actual IP address
-DATA_LAYER_URL = 'http://<Data_Layer_IP>:5002/store'
+DATA_LAYER_URL = 'http://172.20.96.214:5002/store'
 
 # mock, delete later TODO
 @app.route('/process', methods=['POST'])
@@ -129,8 +129,9 @@ def query_calendar_by_id(calendar_id):
 def update_calendar(calendar_id):
     # Inputs from API request
     data = request.get_json()
-    title = data.get('title')
-    details = data.get('details')
+    title = data.get('calendar_title')
+    print('business layer: ', data)
+    details = data.get('calendar_details')
 
     # Send request to the data layer
     response = requests.put(f"{DATA_LAYER_URL}/update_calendar/{calendar_id}", json={
@@ -151,6 +152,30 @@ def see_meetings_in_calendar(calendar_id):
     # Send request to the data layer
     response = requests.get(f"{DATA_LAYER_URL}/calendar/{calendar_id}/meetings")
     return jsonify(response.json()), response.status_code
+
+# Business layer route for associating a meeting with a calendar
+@app.route('/calendar/addMeeting', methods=['POST'])
+def add_meeting_to_calendar():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    calendar_id = data.get('calendar_id')
+
+    if not meeting_id or not calendar_id:
+        return jsonify({"error": "Meeting ID and Calendar ID are required"}), 400
+
+    try:
+        # Forward the request to the data layer
+        response = requests.post(f'{DATA_LAYER_URL}/store/associate_calendar_meeting', json={
+            'meeting_id': meeting_id,
+            'calendar_id': calendar_id
+        })
+
+        # Return the response from the data layer
+        return jsonify(response.json()), response.status_code
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 # Participant Management
 @app.route('/participant', methods=['POST'])

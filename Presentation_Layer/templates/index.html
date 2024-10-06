@@ -11,14 +11,14 @@
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
   </head>
   <body>
-    <div id="datastuff">
+    <!-- <div id="datastuff">
       <h1>Enter Data</h1>
       <form id="data-form">
         <label for="info">Data:</label>
         <input type="text" id="info" name="info" />
         <button type="submit">Submit</button>
       </form>
-    </div>
+    </div> -->
 
     <div id="meetingTitle">
       <h1>Calendar App</h1>
@@ -71,21 +71,24 @@
         </div>
 
         <div id="meeting-location-section" style="display:none; margin-top: 10px;">
-          <label for="meeting-location">Enter Meeting Date:</label>
+          <label for="meeting-location">Enter Meeting Location:</label>
           <input type="text" id="meeting-location" name="meeting-location" placeholder="Enter Meeting Location">
           
         </div>
 
         <div id="meeting-details-section" style="display:none; margin-top: 10px;">
-          <label for="meeting-details">Enter Meeting Date:</label>
+          <label for="meeting-details">Enter Meeting Details:</label>
           <input type="text" id="meeting-details" name="meeting-details" placeholder="Enter Meeting Details">
           
         </div>
       </form>
 
       <div id="meeting-submit-section" style="display:none; margin-top: 10px;"></div>
-        <button type="submit" onclick="meetingSubmit()">Submit</button>
+        <button id="submitButton" type="submit">Submit</button>
        </div>
+
+       <ul id="meetingsList"></ul>
+
     </div>
 
     <!-- Calendar management form -->
@@ -101,27 +104,41 @@
           <option value="4">Update Calendar</option>
           <option value="5">Delete Calendar</option>
           <option value="6">List of Meetings for a Calendar</option>
+          <option value="7">Add Meeting to a Calendar</option>
         </select>
 
         <!-- This section will appear dynamically when the user selects an option -->
         <div id="calendar-id-section" style="display:none; margin-top: 10px;">
           <label for="calendar-id">Enter Calendar ID:</label>
           <input type="text" id="calendar-id" name="calendar-id" placeholder="Enter Calendar ID">
-          <button type="submit">Submit</button>
+          
         </div>
 
         <div id="calendar-title-section" style="display:none; margin-top: 10px;">
-          <label for="calendar-title">Enter calendar Title:</label>
-          <input type="text" id="calendar-title" name="calendar-title" placeholder="Enter calendar Title">
-          <button type="submit">Submit</button>
+          <label for="calendar-title">Enter Calendar Title:</label>
+          <input type="text" id="calendar-title" name="calendar-title" placeholder="Enter Calendar Title">
+          
         </div>
 
         <div id="calendar-details-section" style="display:none; margin-top: 10px;">
-          <label for="calendar-details">Enter calendar Date:</label>
-          <input type="text" id="calendar-details" name="calendar-details" placeholder="Enter calendar Details">
-          <button type="submit">Submit</button>
+          <label for="calendar-details">Enter Calendar Details:</label>
+          <input type="text" id="calendar-details" name="calendar-details" placeholder="Enter Calendar Details">
+          
         </div>
+
+        <div id="meeting-id-section" style="display:none; margin-top: 10px;">
+          <label for="meeting-id">Enter Meeting ID:</label>
+          <input type="text" id="meeting-id" name="meeting-id" placeholder="Enter Meeting ID">
+        </div>
+        
       </form>
+
+       <div id="calendar-submit-section" style="display:none; margin-top: 10px;">
+        <button id="calendarSubmitButton" type="submit">Submit</button>
+    </div>
+    
+
+       <ul id="calendarList"></ul>
     </div>
 
     <!-- Participant management form -->
@@ -158,8 +175,8 @@
         </div>
 
         <div id="participant-email-section" style="display:none; margin-top: 10px;">
-          <label for="participant-email">Enter Participant email:</label>
-          <input type="text" id="participant-email" name="participant-email" placeholder="Enter Participant email">
+          <label for="participant-email">Enter Participant Email:</label>
+          <input type="text" id="participant-email" name="participant-email" placeholder="Enter Participant Email">
           <button type="submit">Submit</button>
         </div>
       </form>
@@ -181,8 +198,8 @@
 
         <!-- This section will appear dynamically when the user selects an option -->
         <div id="attachment-id-section" style="display:none; margin-top: 10px;">
-          <label for="attachment-id">Enter attachment ID:</label>
-          <input type="text" id="attachment-id" name="attachment-id" placeholder="Enter attachment ID">
+          <label for="attachment-id">Enter Attachment ID:</label>
+          <input type="text" id="attachment-id" name="attachment-id" placeholder="Enter Attachment ID">
           <button type="submit">Submit</button>
         </div>
 
@@ -193,8 +210,8 @@
         </div>
 
         <div id="attachment-url-section" style="display:none; margin-top: 10px;">
-          <label for="attachment-url">Enter Participant Name:</label>
-          <input type="text" id="attachment-url" name="attachment-url" placeholder="Enter attachment url">
+          <label for="attachment-url">Enter Attachment URL:</label>
+          <input type="text" id="attachment-url" name="attachment-url" placeholder="Enter Attachment URL">
           <button type="submit">Submit</button>
         </div>
       </form>
