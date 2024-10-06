@@ -161,7 +161,8 @@ function handleCalendarOptionChange()
 }
 
 // Function to handle changes in the participant management options
-function handleParticipantOptionChange() {
+function handleParticipantOptionChange() 
+{
   const selectedParticipantOption = document.getElementById("participant-option").value;
   
   const participantIdSection = document.getElementById("participant-id-section");
@@ -169,27 +170,54 @@ function handleParticipantOptionChange() {
   const participantNameSection = document.getElementById("participant-name-section");
   const participantEmailSection = document.getElementById("participant-email-section");
 
+  const participantSubmitSection = document.getElementById("participant-submit-section"); 
+  const participantSubmitButton = document.getElementById("participant-submit-button")
+
   // Display the meeting ID input field only for options that require it
-  if (selectedParticipantOption === "1" || selectedParticipantOption === "4") {
+  if (selectedParticipantOption === "1" || selectedParticipantOption === "4") 
+  {
     // Creating or querying all meetings does not require a meeting ID
     participantIdSection.style.display = "block";  
     meetingIdSection.style.display = "block";  
     participantNameSection.style.display = "block";    
-    participantEmailSection.style.display = "block";    
+    participantEmailSection.style.display = "block"; 
+    participantSubmitSection.style.display = "block";  
   } 
   else if (selectedParticipantOption === "2") {
     // Creating or querying all meetings does not require a meeting ID
     participantIdSection.style.display = "none";
     participantNameSection.style.display = "none";       
     participantEmailSection.style.display = "none";  
-    meetingIdSection.style.display = "none";     
+    meetingIdSection.style.display = "none"; 
+    participantSubmitSection.style.display = "block";  
   } else {
     // Other options (query by ID, update, delete) require a meeting ID
     participantIdSection.style.display = "block";
     participantNameSection.style.display = "none";   
     participantEmailSection.style.display = "none"; 
-    meetingIdSection.style.display = "none";     
+    participantSubmitSection.style.display = "block";     
   }
+
+  participantSubmitButton.onclick = function() 
+  {
+    if (selectedParticipantOption === "1") 
+    {
+      addCalendar();
+    } else if (selectedParticipantOption === "2") {
+      allCalendar();
+    } else if (selectedParticipantOption === "3") {
+      findCalendarById()
+    } else if (selectedParticipantOption === "4") {
+      updateCalendar();
+    } else if (selectedParticipantOption === "5") {
+      deleteCalendar();
+    } else if (selectedParticipantOption === "6") {
+      allMeetinginCalendar();
+    } else if (selectedParticipantOption === "7") {
+      associateMeetingWithCalendar()
+    }
+  };
+
 }
 
 // Function to handle changes in the attachment management options
@@ -680,7 +708,8 @@ async function associateMeetingWithCalendar() {
   };
 
   try {
-    const response = await fetch('/addMeetingToCalendar', {
+    const response = await fetch('/addMeetingToCalendar', 
+      {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -699,14 +728,353 @@ async function associateMeetingWithCalendar() {
   }
 }
 
+// Add a new participant
+async function addParticipant() {
+  const participantID = document.getElementById("participant-id").value;
+  const participantName = document.getElementById("participant-name").value;
+  const participantEmail = document.getElementById("participant-email").value;
 
+  const data = {
+    participant_id: participantID,
+    name: participantName,
+    email: participantEmail
+  };
 
+  try {
+    const response = await fetch('/addParticipant', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('Participant added successfully:', responseData);
+    } else {
+      console.error('Error adding participant:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
+// Get all participants
+async function allParticipants() {
+  try {
+    const response = await fetch('/allParticipants', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
+    if (response.ok) {
+      const participantData = await response.json();
+      console.log('Participants retrieved successfully:', participantData);
 
+      const participantList = document.getElementById('participantList'); // Replace with your actual HTML element
+      participantList.innerHTML = ''; // Clear previous content
 
+      // Check if participantData is an array and has data
+      if (Array.isArray(participantData) && participantData.length > 0) {
+        participantData.forEach(participant => {
+          const participantItem = document.createElement('li'); // Create list item for each participant
+          participantItem.innerHTML = `
+            <strong>ID:</strong> ${participant[0] || 'N/A'}<br>
+            <strong>Name:</strong> ${participant[1] || 'N/A'}<br>
+            <strong>Email:</strong> ${participant[2] || 'N/A'}
+          `;
+          participantList.appendChild(participantItem); // Append to list
+        });
+      } else {
+        participantList.innerHTML = '<li>No participants found.</li>'; // Handle empty response
+      }
+    } else {
+      console.error('Error retrieving participants:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
+// Find a participant by ID
+async function findParticipantById() {
+  const participantID = document.getElementById("participant-id").value;
+
+  if (!participantID) {
+    console.error('Participant ID is required.');
+    return;
+  }
+
+  try {
+    const response = await fetch(`/participantsByID?participant_id=${encodeURIComponent(participantID)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const participantData = await response.json();
+      console.log('Participant retrieved successfully:', participantData);
+
+      const participantList = document.getElementById('participantList'); // Replace with your actual HTML element
+      participantList.innerHTML = ''; // Clear previous content
+
+      if (Array.isArray(participantData) && participantData.length > 0) {
+        const participantItem = document.createElement('li');
+        participantItem.innerHTML = `
+          <strong>ID:</strong> ${participantData[0] || 'N/A'}<br>
+          <strong>Name:</strong> ${participantData[1] || 'N/A'}<br>
+          <strong>Email:</strong> ${participantData[2] || 'N/A'}
+        `;
+        participantList.appendChild(participantItem);
+      } else {
+        participantList.innerHTML = '<li>No participant found with this ID.</li>';
+      }
+    } else {
+      console.error('Error retrieving participant:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Update a participant
+async function updateParticipant() {
+  const participantID = document.getElementById("participant-id").value;
+  const participantName = document.getElementById("participant-name").value;
+  const participantEmail = document.getElementById("participant-email").value;
+
+  const data = {
+    participant_id: participantID,
+    name: participantName,
+    email: participantEmail
+  };
+
+  try {
+    const response = await fetch('/updateParticipants', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      const updatedParticipant = await response.json();
+      console.log('Participant updated successfully:', updatedParticipant);
+    } else {
+      console.error('Error updating participant:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Delete a participant
+async function deleteParticipant() {
+  const participantID = document.getElementById("participant-id").value;
+
+  const data = {
+    participant_id: participantID
+  };
+
+  try {
+    const response = await fetch('/deleteParticipants', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Participant deleted successfully:', result.message);
+    } else {
+      console.error('Error deleting participant:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Add a new attachment
+async function addAttachment() {
+  const attachmentID = document.getElementById("attachment-id").value;
+  const attachmentName = document.getElementById("attachment-name").value;
+  const attachmentFile = document.getElementById("attachment-file").value;
+
+  const data = {
+    attachment_id: attachmentID,
+    name: attachmentName,
+    file: attachmentFile
+  };
+
+  try {
+    const response = await fetch('/addAttachment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('Attachment added successfully:', responseData);
+    } else {
+      console.error('Error adding attachment:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Get all attachments
+async function allAttachments() {
+  try {
+    const response = await fetch('/allAttachment', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      const attachmentData = await response.json();
+      console.log('Attachments retrieved successfully:', attachmentData);
+
+      const attachmentList = document.getElementById('attachmentList'); // Replace with your actual HTML element
+      attachmentList.innerHTML = ''; // Clear previous content
+
+      // Check if attachmentData is an array and has data
+      if (Array.isArray(attachmentData) && attachmentData.length > 0) {
+        attachmentData.forEach(attachment => {
+          const attachmentItem = document.createElement('li'); // Create list item for each attachment
+          attachmentItem.innerHTML = `
+            <strong>ID:</strong> ${attachment[0] || 'N/A'}<br>
+            <strong>Name:</strong> ${attachment[1] || 'N/A'}<br>
+            <strong>File:</strong> ${attachment[2] || 'N/A'}
+          `;
+          attachmentList.appendChild(attachmentItem); // Append to list
+        });
+      } else {
+        attachmentList.innerHTML = '<li>No attachments found.</li>'; // Handle empty response
+      }
+    } else {
+      console.error('Error retrieving attachments:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Find an attachment by ID
+async function findAttachmentById() {
+  const attachmentID = document.getElementById("attachment-id").value;
+
+  if (!attachmentID) {
+    console.error('Attachment ID is required.');
+    return;
+  }
+
+  try {
+    const response = await fetch(`/attachmentById?attachment_id=${encodeURIComponent(attachmentID)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const attachmentData = await response.json();
+      console.log('Attachment retrieved successfully:', attachmentData);
+
+      const attachmentList = document.getElementById('attachmentList'); // Replace with your actual HTML element
+      attachmentList.innerHTML = ''; // Clear previous content
+
+      if (Array.isArray(attachmentData) && attachmentData.length > 0) {
+        const attachmentItem = document.createElement('li');
+        attachmentItem.innerHTML = `
+          <strong>ID:</strong> ${attachmentData[0] || 'N/A'}<br>
+          <strong>Name:</strong> ${attachmentData[1] || 'N/A'}<br>
+          <strong>File:</strong> ${attachmentData[2] || 'N/A'}
+        `;
+        attachmentList.appendChild(attachmentItem);
+      } else {
+        attachmentList.innerHTML = '<li>No attachment found with this ID.</li>';
+      }
+    } else {
+      console.error('Error retrieving attachment:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Update an attachment
+async function updateAttachment() {
+  const attachmentID = document.getElementById("attachment-id").value;
+  const attachmentName = document.getElementById("attachment-name").value;
+  const attachmentFile = document.getElementById("attachment-file").value;
+
+  const data = {
+    attachment_id: attachmentID,
+    name: attachmentName,
+    file: attachmentFile
+  };
+
+  try {
+    const response = await fetch('/updateAttachment', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      const updatedAttachment = await response.json();
+      console.log('Attachment updated successfully:', updatedAttachment);
+    } else {
+      console.error('Error updating attachment:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Delete an attachment
+async function deleteAttachment() {
+  const attachmentID = document.getElementById("attachment-id").value;
+
+  const data = {
+    attachment_id: attachmentID
+  };
+
+  try {
+    const response = await fetch('/deleteAttachment', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Attachment deleted successfully:', result.message);
+    } else {
+      console.error('Error deleting attachment:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 
 

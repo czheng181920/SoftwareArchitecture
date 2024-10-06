@@ -159,27 +159,30 @@
         <div id="participant-id-section" style="display:none; margin-top: 10px;">
           <label for="participant-id">Enter Participant ID:</label>
           <input type="text" id="participant-id" name="participant-id" placeholder="Enter Participant ID">
-          <button type="submit">Submit</button>
         </div>
 
         <div id="meeting-id-section" style="display:none; margin-top: 10px;">
           <label for="meeting-id">Enter Meeting ID:</label>
           <input type="text" id="meeting-id" name="meeting-id" placeholder="Enter Meeting ID">
-          <button type="submit">Submit</button>
         </div>
 
         <div id="participant-name-section" style="display:none; margin-top: 10px;">
           <label for="participant-name">Enter Participant Name:</label>
           <input type="text" id="participant-name" name="participant-name" placeholder="Enter Participant Name">
-          <button type="submit">Submit</button>
         </div>
 
         <div id="participant-email-section" style="display:none; margin-top: 10px;">
           <label for="participant-email">Enter Participant Email:</label>
           <input type="text" id="participant-email" name="participant-email" placeholder="Enter Participant Email">
-          <button type="submit">Submit</button>
         </div>
       </form>
+
+      <div id="participant-submit-section" style="display:none; margin-top: 10px;">
+        <button id="participantSubmitButton" type="submit">Submit</button>
+      </div>
+    
+       <ul id="participantList"></ul>
+
     </div>
 
     <!-- Attachment management form -->
@@ -200,23 +203,27 @@
         <div id="attachment-id-section" style="display:none; margin-top: 10px;">
           <label for="attachment-id">Enter Attachment ID:</label>
           <input type="text" id="attachment-id" name="attachment-id" placeholder="Enter Attachment ID">
-          <button type="submit">Submit</button>
         </div>
 
         <div id="meeting-id-section" style="display:none; margin-top: 10px;">
           <label for="meeting-id">Enter Meeting ID:</label>
           <input type="text" id="meeting-id" name="meeting-id" placeholder="Enter Meeting ID">
-          <button type="submit">Submit</button>
         </div>
 
         <div id="attachment-url-section" style="display:none; margin-top: 10px;">
           <label for="attachment-url">Enter Attachment URL:</label>
           <input type="text" id="attachment-url" name="attachment-url" placeholder="Enter Attachment URL">
-          <button type="submit">Submit</button>
         </div>
       </form>
-    </div>
 
+      <div id="attachment-submit-section" style="display:none; margin-top: 10px;">
+        <button id="attachmentSubmitButton" type="submit">Submit</button>
+      </div>
+    
+      <ul id="attachmentList"></ul>
+
+    </div>
+  
     <p id="response"></p>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
