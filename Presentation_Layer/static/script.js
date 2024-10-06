@@ -34,6 +34,7 @@ function handleMeetingOptionChange() {
   const meetingDateSection = document.getElementById("meeting-date-section");
   const meetingLocationSection = document.getElementById("meeting-location-section");
   const meetingDetailsSection = document.getElementById("meeting-details-section");
+  const meetingSubmitSection = document.getElementById("meeting-submit-section");
 
 
   // Display the meeting ID input field only for options that require it
@@ -43,7 +44,9 @@ function handleMeetingOptionChange() {
     meetingTitleSection.style.display = "block";  
     meetingDateSection.style.display = "block";    
     meetingLocationSection.style.display = "block";    
-    meetingDetailsSection.style.display = "block";    
+    meetingDetailsSection.style.display = "block";
+    meetingSubmitSection.style.diplay = "block";  
+   
   } 
   else if (selectedMeetingOption === "2") {
     // Creating or querying all meetings does not require a meeting ID
@@ -51,14 +54,17 @@ function handleMeetingOptionChange() {
     meetingTitleSection.style.display = "none";   
     meetingDateSection.style.display = "none";    
     meetingLocationSection.style.display = "none";    
-    meetingDetailsSection.style.display = "none";     
-  } else {
+    meetingDetailsSection.style.display = "none"; 
+    meetingSubmitSection.style.diplay = "block";    
+  } 
+  else {
     // Other options (query by ID, update, delete) require a meeting ID
     meetingIdSection.style.display = "block";
     meetingTitleSection.style.display = "none";
     meetingDateSection.style.display = "none";    
     meetingLocationSection.style.display = "none";    
-    meetingDetailsSection.style.display = "none";    
+    meetingDetailsSection.style.display = "none";
+    meetingSubmitSection.style.diplay = "block";    
   }
 }
 
@@ -149,5 +155,59 @@ function handleAttachmentOptionChange() {
     attachmentUrlSection.style.display = "none";   
   }
 }
+
+
+async function meetingSubmit()
+{
+    const meetingID = document.getElementById("meeting-id").value;
+    const meetingTitle = document.getElementById("meeting-title").value;
+    const meetingDate = document.getElementById("meeting-date").value; 
+    const meetingLocation = document.getElementById("meeting-location").value;
+    const meetingDetails = document.getElementById("meeting-details").value; 
+
+    // Create JSON object
+    const data = {
+      meeting_id: meetingID,
+      title: meetingTitle, 
+      date_time: meetingDate, 
+      location: meetingLocation, 
+      details: meetingDetails
+      };
+
+    // Send POST request
+    try 
+    {
+      const response = await fetch('/submit', 
+        {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    
+      if (response.ok) 
+      {
+      const responseData = await response.json();
+      console.log('Meeting created successfully:', responseData);
+      
+      } 
+      else 
+      {
+        console.error('Error creating meeting:', response.status);
+       
+      }
+    } 
+    catch (error) {
+      console.error('Error:', error);
+      
+    }
+}
+
+
+
+
+
+
 
 
