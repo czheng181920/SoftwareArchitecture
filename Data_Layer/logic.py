@@ -52,12 +52,16 @@ def db_query_meeting_by_id(meeting_id):
 def db_update_meeting(meeting_id, title, date_time, location, details):
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
+    # print all inputs to make sure they are correct
+    print(f"meeting_id: {meeting_id}, title: {title}, date_time: {date_time}, location: {location}, details: {details}")
     cursor.execute('PRAGMA foreign_keys = ON')
 
     cursor.execute('UPDATE Meetings SET title=?, date_time=?, location=?, details=? WHERE meeting_id=?', 
                    (title, date_time, location, details, meeting_id))
     
     print(f'Meeting updated: {meeting_id}')
+    
+    connection.commit()
     connection.close()
 
 def db_delete_meeting(meeting_id):

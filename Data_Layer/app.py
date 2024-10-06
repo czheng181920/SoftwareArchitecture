@@ -52,6 +52,12 @@ def update_meeting(meeting_id):
     date_time = data.get('date_time')
     location = data.get('location')
     details = data.get('details')
+    # print inputs
+    print(meeting_id)
+    print(title)
+    print(date_time)
+    print(location)
+    print(details)
 
     try:
         db.db_update_meeting(meeting_id, title, date_time, location, details)
@@ -67,7 +73,7 @@ def delete_meeting(meeting_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@app.route('/store/calendars/<meeting_id>', methods=['GET'])
+@app.route('/store/meeting/<meeting_id>/calendars', methods=['GET'])
 def list_calendars_by_meeting_id(meeting_id):
     try:
         calendars = db.db_list_calendars_by_meeting_ID(meeting_id)
@@ -104,7 +110,7 @@ def create_calendar():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/store/calendars', methods=['GET'])
+@app.route('/store/all_calendars', methods=['GET'])
 def get_all_calendars():
     try:
         calendars = db.db_find_all_calendar()
@@ -128,11 +134,12 @@ def update_calendar(calendar_id):
     data = request.json
     title = data.get('title')
     details = data.get('details')
-
+    print(title)
     try:
         db.db_update_calendar(calendar_id, title, details)
         return jsonify({"message": "Calendar updated successfully"}), 200
     except Exception as e:
+        print(str(e))
         return jsonify({"error": str(e)}), 500
 
 @app.route('/store/delete_calendar/<calendar_id>', methods=['DELETE'])
@@ -233,22 +240,11 @@ def execute_db_function(db_function, *args):
     except Exception as e:
         return jsonify({"error": "An error occurred: " + str(e)}), 500
 
-@app.route('/attachments/<int:attachment_id>', methods=['DELETE'])
+@app.route('/store/attachments/<int:attachment_id>', methods=['DELETE'])
 def delete_attachment(attachment_id):
     return execute_db_function(db.db_delete_attachment, attachment_id)
 
-@app.route('/associate', methods=['POST'])
-def create_associated_calendar_meeting():
-    data = request.json
-    meeting_id = data.get('meeting_id')
-    calendar_id = data.get('calendar_id')
-    return execute_db_function(db.db_create_associated_calendar_meeting, meeting_id, calendar_id)
-
-@app.route('/meetings/<int:meeting_id>/calendars/<int:calendar_id>', methods=['DELETE'])
-def delete_meeting_calendar(calendar_id, meeting_id):
-    return execute_db_function(db.db_delete_meeting_calendar, calendar_id, meeting_id)
-
-@app.route('/meetings/<int:meeting_id>/calendars', methods=['GET'])
+@app.route('/store/meetings/<int:meeting_id>/calendars', methods=['GET'])
 def list_calendars_for_meeting(meeting_id):
     try:
         calendars = db.db_meeting_list_calendar(meeting_id)
@@ -256,7 +252,7 @@ def list_calendars_for_meeting(meeting_id):
     except Exception as e:
         return jsonify({"error": "An error occurred: " + str(e)}), 500
 
-@app.route('/meetings/<int:meeting_id>/participants', methods=['GET'])
+@app.route('/store/meetings/<int:meeting_id>/participants', methods=['GET'])
 def list_participants_for_meeting(meeting_id):
     try:
         participants = db.db_participant_list_calendar(meeting_id)
@@ -264,7 +260,7 @@ def list_participants_for_meeting(meeting_id):
     except Exception as e:
         return jsonify({"error": "An error occurred: " + str(e)}), 500
 
-@app.route('/meetings/<int:meeting_id>/attachments', methods=['GET'])
+@app.route('/store/meetings/<int:meeting_id>/attachments', methods=['GET'])
 def list_attachments_for_meeting(meeting_id):
     try:
         attachments = db.db_attachment_list_calendar(meeting_id)
@@ -272,7 +268,7 @@ def list_attachments_for_meeting(meeting_id):
     except Exception as e:
         return jsonify({"error": "An error occurred: " + str(e)}), 500
 
-@app.route('/calendars/<int:calendar_id>/meetings', methods=['GET'])
+@app.route('/store/calendars/<int:calendar_id>/meetings', methods=['GET'])
 def list_meetings_for_calendar(calendar_id):
     try:
         meetings = db.db_calendar_list_meeting(calendar_id)
