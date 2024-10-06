@@ -526,9 +526,6 @@ async function findCalendarById()
       console.error('Error:', error);
   }
 
-
-
-
 }
 
 async function updateCalendar()
