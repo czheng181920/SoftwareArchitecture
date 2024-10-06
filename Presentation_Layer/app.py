@@ -137,12 +137,17 @@ def getCalendar():
 
 @app.route('/findCalendarById', methods=['GET'])
 def findCalendar():
-    data = request.get_json()
-    calendar_id = data.get('calendar_id')
+    calendar_id = request.args.get('calendar-id')  # Get the meeting ID from query parameters
+    if not calendar_id:
+        return jsonify({"error": "Calendar ID is required"}), 400
+    
     url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/{calendar_id}'
     response = requests.get(url)
-    return jsonify(response.json()), response.status_code
 
+    if response.ok:
+        return jsonify(response.json()), response.status_code
+    else:
+        return jsonify({"error": "Failed to retrieve calendar"}), response.status_code
 @app.route('/updateCalendar', methods=['PUT'])
 def updateCalendar():
     data = request.get_json()
