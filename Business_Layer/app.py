@@ -153,6 +153,30 @@ def see_meetings_in_calendar(calendar_id):
     response = requests.get(f"{DATA_LAYER_URL}/calendar/{calendar_id}/meetings")
     return jsonify(response.json()), response.status_code
 
+# Business layer route for associating a meeting with a calendar
+@app.route('/calendar/addMeeting', methods=['POST'])
+def add_meeting_to_calendar():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    calendar_id = data.get('calendar_id')
+
+    if not meeting_id or not calendar_id:
+        return jsonify({"error": "Meeting ID and Calendar ID are required"}), 400
+
+    try:
+        # Forward the request to the data layer
+        response = requests.post(f'{DATA_LAYER_URL}/store/associate_calendar_meeting', json={
+            'meeting_id': meeting_id,
+            'calendar_id': calendar_id
+        })
+
+        # Return the response from the data layer
+        return jsonify(response.json()), response.status_code
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # Participant Management
 @app.route('/participant', methods=['POST'])
 def create_participant():

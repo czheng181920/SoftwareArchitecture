@@ -99,11 +99,14 @@ function handleCalendarOptionChange()
   const selectedCalendarOption = document.getElementById("calendar-option").value;
   
   const calendarIdSection = document.getElementById("calendar-id-section");
+  const meetingIdSection = document.getElementById("meeting-id-section");
   const calendarTitleSection = document.getElementById("calendar-title-section");
   const calendarDetailsSection = document.getElementById("calendar-details-section");
   const calendarSubmitSection = document.getElementById("calendar-submit-section");
   
   const calendarSubmitButton = document.getElementById("calendarSubmitButton");
+
+  console.log(selectedCalendarOption);
 
   // Display the meeting ID input field only for options that require it
   if (selectedCalendarOption === "1" || selectedCalendarOption === "4") {
@@ -112,7 +115,7 @@ function handleCalendarOptionChange()
     calendarTitleSection.style.display = "block";    
     calendarDetailsSection.style.display = "block";
     calendarSubmitSection.style.display = "block";
-
+    meetingIdSection.style.display= "none";
   } 
   else if (selectedCalendarOption === "2") {
     // Creating or querying all meetings does not require a meeting ID
@@ -120,12 +123,19 @@ function handleCalendarOptionChange()
     calendarTitleSection.style.display = "none";       
     calendarDetailsSection.style.display = "none"; 
     calendarSubmitSection.style.display = "block";    
+    meetingIdSection.style.display= "none";
+  } 
+  else if (selectedCalendarOption === "7") {
+    calendarIdSection.style.display = "block";
+    meetingIdSection.style.display= "block";
+    calendarSubmitSection.style.display = "block"; 
   } else {
     // Other options (query by ID, update, delete) require a meeting ID
     calendarIdSection.style.display = "block";
     calendarTitleSection.style.display = "none";   
     calendarDetailsSection.style.display = "none";
     calendarSubmitSection.style.display = "block";   
+    meetingIdSection.style.display= "none";
   }
 
   calendarSubmitButton.onclick = function() 
@@ -143,6 +153,8 @@ function handleCalendarOptionChange()
       deleteCalendar();
     } else if (selectedCalendarOption === "6") {
       allMeetinginCalendar();
+    } else if (selectedCalendarOption === "7") {
+      associateMeetingWithCalendar()
     }
   };
 
@@ -616,7 +628,7 @@ async function updateCalendar()
 
 async function deleteCalendar()
 {
-  const meetingID = document.getElementById("calendar-id").value; 
+  const calendarID = document.getElementById("calendar-id").value; 
 
   const data = {
       calendar_id: calendarID
@@ -654,6 +666,36 @@ async function allMeetinginCalendar()
 {
   
 
+}
+
+async function associateMeetingWithCalendar() {
+  const meetingId = document.getElementById("meeting-id").value;
+  const calendarId = document.getElementById("calendar-id").value;
+
+  // Create the data object to send
+  const data = {
+    meeting_id: meetingId,
+    calendar_id: calendarId
+  };
+
+  try {
+    const response = await fetch('/addMeetingToCalendar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('Meeting associated with calendar successfully:', responseData);
+    } else {
+      console.error('Error associating meeting with calendar:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
 
