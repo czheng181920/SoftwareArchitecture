@@ -58,7 +58,7 @@ function handleMeetingOptionChange() {
     meetingDateSection.style.display = "none";    
     meetingLocationSection.style.display = "none";    
     meetingDetailsSection.style.display = "none"; 
-    meetingSubmitSection.style.diplay = "block";    
+    meetingSubmitSection.style.display = "block";    
   } 
   else {
     // update, delete, list of cal for meeting, list of attachement, list of participants
@@ -67,7 +67,7 @@ function handleMeetingOptionChange() {
     meetingDateSection.style.display = "none";    
     meetingLocationSection.style.display = "none";    
     meetingDetailsSection.style.display = "none";
-    meetingSubmitSection.style.diplay = "block";    
+    meetingSubmitSection.style.display = "block";    
   }
 
   meetingSubmitButton.onclick = function() {
@@ -246,10 +246,11 @@ async function meetingQuery()
         {
         const meetingItem = document.createElement('li');
         meetingItem.innerHTML = `
-           <strong>Title:</strong> ${meeting[1] || 'N/A'}<br>
-            <strong>Date:</strong> ${meeting[2] || 'N/A'}<br>
-            <strong>Location:</strong> ${meeting[3] || 'N/A'}<br>
-            <strong>Details:</strong> ${meeting[4] || 'N/A'}
+          <strong>ID:</strong> ${meeting[0] || 'N/A'}<br>
+          <strong>Title:</strong> ${meeting[1] || 'N/A'}<br>
+          <strong>Date:</strong> ${meeting[2] || 'N/A'}<br>
+          <strong>Location:</strong> ${meeting[3] || 'N/A'}<br>
+          <strong>Details:</strong> ${meeting[4] || 'N/A'}
         `;
         meetingsList.appendChild(meetingItem);
       });
@@ -273,6 +274,42 @@ async function meetingQueryByID()
 async function updateMeeting()
 {
 
+  const meetingID = document.getElementById("meeting-id").value;
+  const meetingTitle = document.getElementById("meeting-title").value;
+  const meetingDate = document.getElementById("meeting-date").value; 
+  const meetingLocation = document.getElementById("meeting-location").value;
+  const meetingDetails = document.getElementById("meeting-details").value; 
+
+    // Create JSON object
+    const data = {
+      meeting_id: meetingID,
+      title: meetingTitle, 
+      date_time: meetingDate, 
+      location: meetingLocation, 
+      details: meetingDetails
+      };
+
+    try {
+        const response = await fetch('/updateMeeting', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data), // Assuming updatedData is an object with updated fields
+        });
+
+        if (response.ok) {
+            const updatedMeeting = await response.json();
+            console.log('Updated Meeting:', updatedMeeting);
+
+            // Optionally, display a success message or update the UI accordingly
+            alert('Meeting updated successfully!');
+        } else {
+            console.error('Error updating meeting:', response.status);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 async function deleteMeeting()

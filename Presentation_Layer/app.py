@@ -50,10 +50,20 @@ def getMeetingByID():
 @app.route('/updateMeeting', methods=['PUT'])
 def updateMeetingByID():
     data = request.get_json()
+    title = data.get('title')
+    date_time = data.get('date_time')
+    location = data.get('location')
+    details = data.get('details')
+    
     meeting_id = data.get('meeting_id')
     print("Meeting id to be updated sent to Business Layer")
     url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
-    response = requests.put(url, data)
+    response = requests.put(url, json={
+        "title": title,
+        "date_time": date_time,
+        "location": location,
+        "details": details
+    })
     return jsonify(response.json()), response.status_code
 
 @app.route('/deleteMeeting', methods=['DELETE'])
