@@ -10,8 +10,8 @@ load_dotenv()
 
 # Get Business Layer IP
 #TODO: need to change this in template.env
-BUSINESS_LAYER_IP = os.getenv('BUSINESS_LAYER_IP') 
-# BUSINESS_LAYER_IP = '172.20.55.130' 
+# BUSINESS_LAYER_IP = os.getenv('BUSINESS_LAYER_IP') 
+BUSINESS_LAYER_IP = '172.20.55.130' # neha ip
 
 # serve the index.html file
 @app.route('/')
@@ -29,11 +29,11 @@ def submit():
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 
-@app.route('/allMeeting', methods=['GET'])
+@app.route('/allMeetings', methods=['GET'])
 def getMeetings():
     print("Get all meetings from Business Layer")
     url = f'http://{BUSINESS_LAYER_IP}:5001/meetings'
-    response = request.get(url)
+    response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
 

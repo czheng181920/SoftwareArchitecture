@@ -48,7 +48,7 @@ function handleMeetingOptionChange() {
     meetingDateSection.style.display = "block";    
     meetingLocationSection.style.display = "block";    
     meetingDetailsSection.style.display = "block";
-    meetingSubmitSection.style.diplay = "block";  
+    meetingSubmitSection.style.display = "block";
   } 
   else if (selectedMeetingOption === "2") 
   {
@@ -70,38 +70,26 @@ function handleMeetingOptionChange() {
     meetingSubmitSection.style.diplay = "block";    
   }
 
-  if(selectedMeetingOption === "1")
-  {
-    meetingSubmitButton.onclick = "meetingSubmit()"
-  }
-  else if(selectedMeetingOption === "2")
-  {
-    meetingSubmitButton.onclick = "meetingQuery()"
-  }
-  else if(selectedMeetingOption === "3")
-  {
-    meetingSubmitButton.onclick = "meetingQueryByID()"
-  }
-  else if(selectedMeetingOption === "4")
-  {
-    meetingSubmitButton.onclick = "updateMeeting()"
-  }
-  else if(selectedMeetingOption === "5")
-  {
-    meetingSubmitButton.onclick = "deleteMeeting()"
-  }
-  else if(selectedMeetingOption === "6")
-  {
-    meetingSubmitButton.onclick = "listofCalendarsMeeting()"
-  }
-  else if(selectedMeetingOption === "7")
-  {
-    meetingSubmitButton.onclick = "listofParticipantsMeeting()"
-  }
-  else if(selectedMeetingOption === "8")
-  {
-    meetingSubmitButton.onclick = "listofAttachmentsMeeting()"
-  }
+  meetingSubmitButton.onclick = function() {
+    if (selectedMeetingOption === "1") {
+      meetingSubmit();
+    } else if (selectedMeetingOption === "2") {
+      meetingQuery();
+    } else if (selectedMeetingOption === "3") {
+      meetingQueryByID();
+    } else if (selectedMeetingOption === "4") {
+      updateMeeting();
+    } else if (selectedMeetingOption === "5") {
+      deleteMeeting();
+    } else if (selectedMeetingOption === "6") {
+      listofCalendarsMeeting();
+    } else if (selectedMeetingOption === "7") {
+      listofParticipantsMeeting();
+    } else if (selectedMeetingOption === "8") {
+      listofAttachmentsMeeting();
+    }
+  };
+  
 }
 
 // Function to handle changes in the calendar management options
@@ -249,6 +237,7 @@ async function meetingQuery()
     if (response.ok) 
       {
       const meetingsData = await response.json();
+      console.log(meetingsData);
       const meetingsList = document.getElementById('meetingsList');
 
       meetingsList.innerHTML = ''; // Clear previous content
@@ -256,7 +245,12 @@ async function meetingQuery()
       meetingsData.forEach(meeting => 
         {
         const meetingItem = document.createElement('li');
-        meetingItem.textContent = meeting.title; // Assuming 'title' is the key for meeting titles
+        meetingItem.innerHTML = `
+           <strong>Title:</strong> ${meeting[1] || 'N/A'}<br>
+            <strong>Date:</strong> ${meeting[2] || 'N/A'}<br>
+            <strong>Location:</strong> ${meeting[3] || 'N/A'}<br>
+            <strong>Details:</strong> ${meeting[4] || 'N/A'}
+        `;
         meetingsList.appendChild(meetingItem);
       });
     } 
