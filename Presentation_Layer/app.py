@@ -1,4 +1,4 @@
-from flask import Flask, render_template, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request
 import requests
 from dotenv import load_dotenv
 import os
@@ -42,7 +42,7 @@ def getMeetingByID():
     data = request.get_json()
     meeting_id = data.get('meeting-id')
     print("Meeting id to by found sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting/{}'.format(meeting_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -52,7 +52,7 @@ def updateMeetingByID():
     data = request.get_json()
     meeting_id = data.get('meeting_id')
     print("Meeting id to be updated sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting/{}'.format(meeting_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
     response = requests.put(url, data)
     return jsonify(response.json()), response.status_code
 
@@ -61,7 +61,7 @@ def deleteMeeting():
     data = request.get_json()
     meeting_id = data.get('meeting_id')
     print("Meeting id to be deleted sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting/{}'.format(meeting_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
     response = requests.delete(url)
     return jsonify(response.json()), response.status_code
 
@@ -70,7 +70,7 @@ def getListCalendars():
     data = request.get_json()
     meeting_id = data.get('meeting_id')
     print("Meeting id of list of calendars sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting/{}/calendars'.format(meeting_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}/calendars'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -79,7 +79,7 @@ def getListParticipants():
     data = request.get_json()
     meeting_id = data.get('meeting_id')
     print("Meeting id of list of participants sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting/{}/participants'.format(meeting_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}/participants'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -88,7 +88,7 @@ def getListAttachments():
     data = request.get_json()
     meeting_id = data.get('meeting_id')
     print("Meeting id of list of attachments sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting/{}/attachments'.format(meeting_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}/attachments'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -109,7 +109,7 @@ def getCalendar():
 def findCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}'.format(calendar_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/{calendar_id}'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -117,7 +117,7 @@ def findCalendar():
 def updateCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}'.format(calendar_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/{calendar_id}'
     response = requests.put(url, data)
     return jsonify(response.json()), response.status_code
 
@@ -125,7 +125,7 @@ def updateCalendar():
 def deleteCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}'.format(calendar_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/{calendar_id}'
     response = requests.delete(url)
     return jsonify(response.json()), response.status_code
 
@@ -134,7 +134,7 @@ def deleteCalendar():
 def meetingsInCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}/meetings'.format(calendar_id) 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/{calendar_id}/meetings'
     response = requests.get(url, data)
     return jsonify(response.json()), response.status_code
 
@@ -156,7 +156,7 @@ def allParticipants():
 def participantById():
     data = request.get_json()
     participant_id = data.get('participant_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/participant/<participant_id>'.format(participant_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/participant/{participant_id}'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -164,7 +164,7 @@ def participantById():
 def updateParticipants():
     data = request.get_json()
     participant_id = data.get('participant_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/participant/<participant_id>'.format(participant_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/participant/{participant_id}'
     response = requests.put(url,data)
     return jsonify(response.json()), response.status_code
 
@@ -172,7 +172,7 @@ def updateParticipants():
 def deleteParticipants():
     data = request.get_json()
     participant_id = data.get('participant_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/participant/<participant_id>'.format(participant_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/participant/{participant_id}'
     response = requests.delete(url)
     return jsonify(response.json()), response.status_code
 
@@ -194,7 +194,7 @@ def allAttachments():
 def attachmentsById():
     data = request.get_json()
     attachment_id = data.get('attachment_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/attachment/{attachment_id}'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -202,7 +202,7 @@ def attachmentsById():
 def updateAttachment():
     data = request.get_json()
     attachment_id = data.get('attachment_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/attachment/{attachment_id}'
     response = requests.put(url,data)
     return jsonify(response.json()), response.status_code
 
@@ -210,7 +210,7 @@ def updateAttachment():
 def deleteAttachment():
     data = request.get_json()
     attachment_id = data.get('attachment_id')
-    url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
+    url = f'http://{BUSINESS_LAYER_IP}:5001/attachment/{attachment_id}'
     response = requests.delete(url)
     return jsonify(response.json()), response.status_code
 
