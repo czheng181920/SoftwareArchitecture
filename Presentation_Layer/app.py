@@ -127,7 +127,7 @@ def getListAttachments():
 def addCalendar():
     data = request.get_json()
     url = f'http://{BUSINESS_LAYER_IP}:5001/calendar' 
-    response = requests.post(url, data)
+    response = requests.post(url, json=data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allCalendars', methods=['GET'])

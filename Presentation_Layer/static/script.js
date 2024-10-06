@@ -473,7 +473,7 @@ async function addCalendar()
 
   // Send POST request
   try {
-    const response = await fetch('/createCalendar', {
+    const response = await fetch('/addCalendar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -490,8 +490,6 @@ async function addCalendar()
   } catch (error) {
     console.error('Error:', error);
   }
-
-
 }
 
 async function allCalendar() {
