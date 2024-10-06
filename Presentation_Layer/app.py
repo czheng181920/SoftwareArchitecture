@@ -92,7 +92,7 @@ def getListAttachments():
     return jsonify(response.json()), response.status_code
 
 @app.route('/addCalendar', methods=['POST'])
-def getCalendar():
+def addCalendar():
     data = request.get_json()
     url = 'http://{BUSINESS_LAYER_IP}:5001/calendar' 
     response = requests.post(url, data)
@@ -105,7 +105,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/findCalendarById', methods=['GET'])
-def getCalendar():
+def findCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}'.format(calendar_id) 
@@ -113,7 +113,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/updateCalendar', methods=['PUT'])
-def getCalendar():
+def updateCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}'.format(calendar_id) 
@@ -121,7 +121,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/deleteCalendar', methods=['DELETE'])
-def getCalendar():
+def deleteCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}'.format(calendar_id) 
@@ -130,7 +130,7 @@ def getCalendar():
 
 #/calendar/<calendar_id>/meetings
 @app.route('/allMeetinginCalendar', methods=['GET'])
-def getCalendar():
+def meetingsInCalendar():
     data = request.get_json()
     calendar_id = data.get('calendar_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/calendar/{}/meetings'.format(calendar_id) 
@@ -138,21 +138,21 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/addParticipant', methods=['POST'])
-def getCalendar():
+def addParticipant():
     data = request.get_json()
     url = 'http://{BUSINESS_LAYER_IP}:5001/participant'
     response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allParticipants', methods=['GET'])
-def getCalendar():
+def allParticipants():
     data = request.get_json()
     url = 'http://{BUSINESS_LAYER_IP}:5001/participants'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
 @app.route('/participantsByID', methods=['GET'])
-def getCalendar():
+def participantById():
     data = request.get_json()
     participant_id = data.get('participant_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/participant/<participant_id>'.format(participant_id)
@@ -160,7 +160,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/updateParticipants', methods=['PUT'])
-def getCalendar():
+def updateParticipants():
     data = request.get_json()
     participant_id = data.get('participant_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/participant/<participant_id>'.format(participant_id)
@@ -168,7 +168,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/deleteParticipants', methods=['DELETE'])
-def getCalendar():
+def deleteParticipants():
     data = request.get_json()
     participant_id = data.get('participant_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/participant/<participant_id>'.format(participant_id)
@@ -176,21 +176,21 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/addAttachment', methods=['POST'])
-def getCalendar():
+def addAttachment():
     data = request.get_json()
     url = 'http://{BUSINESS_LAYER_IP}:5001/attachment'
     response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allAttachment', methods=['GET'])
-def getCalendar():
+def allAttachments():
     data = request.get_json()
     url = 'http://{BUSINESS_LAYER_IP}:5001/attachment'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
 @app.route('/attachmentById', methods=['GET'])
-def getCalendar():
+def attachmentsById():
     data = request.get_json()
     attachment_id = data.get('attachment_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
@@ -198,7 +198,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/updateAttachment', methods=['PUT'])
-def getCalendar():
+def updateAttachment():
     data = request.get_json()
     attachment_id = data.get('attachment_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
@@ -206,7 +206,7 @@ def getCalendar():
     return jsonify(response.json()), response.status_code
 
 @app.route('/deleteAttachment', methods=['DELETE'])
-def getCalendar():
+def deleteAttachment():
     data = request.get_json()
     attachment_id = data.get('attachment_id')
     url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
