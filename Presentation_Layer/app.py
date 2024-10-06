@@ -11,6 +11,7 @@ load_dotenv()
 # Get Business Layer IP
 #TODO: need to change this in template.env
 BUSINESS_LAYER_IP = os.getenv('BUSINESS_LAYER_IP') 
+# BUSINESS_LAYER_IP = '172.20.55.130' 
 
 # serve the index.html file
 @app.route('/')
@@ -22,7 +23,7 @@ def home():
 def submit():
     data = request.get_json()
     print("Data sent to Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting'
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meeting'
     response = requests.post(url, json=data)
     
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
@@ -31,7 +32,7 @@ def submit():
 @app.route('/allMeeting', methods=['GET'])
 def getMeetings():
     print("Get all meetings from Business Layer")
-    url = 'http://{BUSINESS_LAYER_IP}:5001/meetings'
+    url = f'http://{BUSINESS_LAYER_IP}:5001/meetings'
     response = request.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -94,13 +95,13 @@ def getListAttachments():
 @app.route('/addCalendar', methods=['POST'])
 def addCalendar():
     data = request.get_json()
-    url = 'http://{BUSINESS_LAYER_IP}:5001/calendar' 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar' 
     response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allCalendar', methods=['GET'])
 def getCalendar():
-    url = 'http://{BUSINESS_LAYER_IP}:5001/calendar' 
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar' 
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -140,14 +141,14 @@ def meetingsInCalendar():
 @app.route('/addParticipant', methods=['POST'])
 def addParticipant():
     data = request.get_json()
-    url = 'http://{BUSINESS_LAYER_IP}:5001/participant'
+    url = f'http://{BUSINESS_LAYER_IP}:5001/participant'
     response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allParticipants', methods=['GET'])
 def allParticipants():
     data = request.get_json()
-    url = 'http://{BUSINESS_LAYER_IP}:5001/participants'
+    url = f'http://{BUSINESS_LAYER_IP}:5001/participants'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -178,14 +179,14 @@ def deleteParticipants():
 @app.route('/addAttachment', methods=['POST'])
 def addAttachment():
     data = request.get_json()
-    url = 'http://{BUSINESS_LAYER_IP}:5001/attachment'
+    url = f'http://{BUSINESS_LAYER_IP}:5001/attachment'
     response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allAttachment', methods=['GET'])
 def allAttachments():
     data = request.get_json()
-    url = 'http://{BUSINESS_LAYER_IP}:5001/attachment'
+    url = f'http://{BUSINESS_LAYER_IP}:5001/attachment'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
@@ -212,13 +213,6 @@ def deleteAttachment():
     url = 'http://{BUSINESS_LAYER_IP}:5001/attachment/{}'.format(attachment_id)
     response = requests.delete(url)
     return jsonify(response.json()), response.status_code
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug = True)
