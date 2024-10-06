@@ -18,19 +18,78 @@ def home():
     return render_template('index.html')
 
 # Endpoint to handle requests from the HTML page
-@app.route('/submit', methods=['POST'])
+@app.route('/addMeeting', methods=['POST'])
 def submit():
     data = request.get_json()
     print("Data sent to Business Layer")
-    response = send_to_business_layer(data)
-    
-    return jsonify({"message": "Data sent to Business Layer", "response": response})
-
-def send_to_business_layer(data):
-    #TODO: this should theoretically work but still needs to be tested and debugged between two machines 
-    url = 'http://{BUSINESS_LAYER_IP}:5001/process'
+    url = 'http://{BUSINESS_LAYER_IP}:5001/meeting'
     response = requests.post(url, json=data)
-    return response.text
+    
+    return jsonify({"message": "Data sent to Business Layer", "response": response.text})
+
+
+@app.route('/allMeeting', methods=['GET'])
+def getMeetings():
+    print("Get all meetings from Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001/meetings'
+    response = request.get(url)
+    return jsonify(response.json()), response.status_code
+
+
+@app.route('/meetingByID', methods=['GET'])
+def getMeetingByID():
+    data = request.get_json()
+    meeting_id = data.get('meeting-id')
+    print("Meeting id to by found sent to Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001//meeting/{}'.format(meeting_id)
+    response = requests.get(url)
+    return jsonify(response.json()), response.status_code
+
+
+@app.route('/updateMeeting', methods=['PUT'])
+def updateMeetingByID():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    print("Meeting id to be updated sent to Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001//meeting/{}'.format(meeting_id) 
+    response = requests.put(url, data)
+    return jsonify(response.json()), response.status_code
+
+@app.route('/deleteMeeting', methods=['DELETE'])
+def deleteMeeting():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    print("Meeting id to be deleted sent to Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001//meeting/{}'.format(meeting_id) 
+    response = requests.delete(url)
+    return jsonify(response.json()), response.status_code
+
+@app.route('/listofCalendars', methods=['GET'])
+def getListCalendars():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    print("Meeting id of list of calendars sent to Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001//meeting/{}/calendars'.format(meeting_id) 
+    response = requests.get(url)
+    return jsonify(response.json()), response.status_code
+
+@app.route('/listofParticipants', methods=['GET'])
+def getListParticipants():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    print("Meeting id of list of participants sent to Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001//meeting/{}/participants'.format(meeting_id) 
+    response = requests.get(url)
+    return jsonify(response.json()), response.status_code
+
+@app.route('/listofAttachments', methods=['GET'])
+def getListAttachments():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    print("Meeting id of list of attachments sent to Business Layer")
+    url = 'http://{BUSINESS_LAYER_IP}:5001//meeting/{}/attachments'.format(meeting_id) 
+    response = requests.get(url)
+    return jsonify(response.json()), response.status_code
 
 
 

@@ -39,7 +39,7 @@ function handleMeetingOptionChange() {
 
   // Display the meeting ID input field only for options that require it
   if (selectedMeetingOption === "1" || selectedMeetingOption === "4") {
-    // Creating or querying all meetings does not require a meeting ID
+    // Creating meetings and querying meeting by id 
     meetingIdSection.style.display = "block";
     meetingTitleSection.style.display = "block";  
     meetingDateSection.style.display = "block";    
@@ -49,7 +49,7 @@ function handleMeetingOptionChange() {
    
   } 
   else if (selectedMeetingOption === "2") {
-    // Creating or querying all meetings does not require a meeting ID
+    // querying all meeting id
     meetingIdSection.style.display = "none";
     meetingTitleSection.style.display = "none";   
     meetingDateSection.style.display = "none";    
@@ -58,7 +58,7 @@ function handleMeetingOptionChange() {
     meetingSubmitSection.style.diplay = "block";    
   } 
   else {
-    // Other options (query by ID, update, delete) require a meeting ID
+    // update, delete, list of cal for meeting, list of attachement, list of participants
     meetingIdSection.style.display = "block";
     meetingTitleSection.style.display = "none";
     meetingDateSection.style.display = "none";    
@@ -177,7 +177,7 @@ async function meetingSubmit()
     // Send POST request
     try 
     {
-      const response = await fetch('/submit', 
+      const response = await fetch('/addMeeting', 
         {
         method: 'POST',
         headers: {
@@ -203,6 +203,11 @@ async function meetingSubmit()
       
     }
 }
+
+
+
+
+
 
 
 
