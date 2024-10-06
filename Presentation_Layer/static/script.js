@@ -83,7 +83,7 @@ function handleMeetingOptionChange()
     } else if (selectedMeetingOption === "5") {
       deleteMeeting();
     } else if (selectedMeetingOption === "6") {
-      listofCalendarsMeeting();
+      listOfCalendarsMeeting();
     } else if (selectedMeetingOption === "7") {
       listofParticipantsMeeting();
     } else if (selectedMeetingOption === "8") {
@@ -103,7 +103,7 @@ function handleCalendarOptionChange()
   const calendarDetailsSection = document.getElementById("calendar-details-section");
   const calendarSubmitSection = document.getElementById("calendar-submit-section");
   
-  const calendarSubmitButton = document.getElementById("calendarButton");
+  const calendarSubmitButton = document.getElementById("calendarSubmitButton");
 
   // Display the meeting ID input field only for options that require it
   if (selectedCalendarOption === "1" || selectedCalendarOption === "4") {
@@ -126,7 +126,6 @@ function handleCalendarOptionChange()
     calendarTitleSection.style.display = "none";   
     calendarDetailsSection.style.display = "none";
     calendarSubmitSection.style.display = "block";   
-
   }
 
   calendarSubmitButton.onclick = function() 
@@ -407,9 +406,46 @@ async function deleteMeeting() {
   }
 }
 
-async function listofCalendarsMeeting()
-{
+async function listOfCalendarsMeeting() {
+  const meetingID = document.getElementById("meeting-id").value; // Get the meeting ID
 
+  try {
+    const response = await fetch(`/listofCalendars?meeting_id=${meetingID}`, {
+      method: 'GET', // Keep it GET
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const calendarsData = await response.json();
+      console.log('Calendars retrieved successfully:', calendarsData);
+      
+      const calendarsList = document.getElementById('calendarsList'); // Assuming you have a <ul> or <div> with this ID
+
+      calendarsList.innerHTML = '';
+      console.log(calendarsData.length)
+
+      // Check if the calendarsData has data and is an array
+      if (Array.isArray(calendarsData) && calendarsData.length > 0) {
+        calendarsData.forEach(calendar => {
+          const calendarItem = document.createElement('li');
+          calendarsList.innerHTML = `
+              <strong>ID:</strong> ${calendarsData[0][0] || 'N/A'}<br>
+              <strong>Name:</strong> ${calendarsData[0][1] || 'N/A'}<br>
+              <strong>Details:</strong> ${calendarsData[0][2] || 'N/A'}<br>
+          `;
+          calendarsList.appendChild(calendarItem);
+        });
+      } else {
+        calendarsList.innerHTML = '<li>No calendars found for this meeting.</li>'; // Handle empty response
+      }
+    } else {
+      console.error('Error retrieving calendars:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
 async function listofParticipantsMeeting()
@@ -458,73 +494,83 @@ async function addCalendar()
 
 }
 
-async function allCalendar()
-{
-  try 
-  {
-    const response = await fetch('/allCalendar', 
-      {
+async function allCalendar() {
+  try {
+    const response = await fetch('/allCalendars', {
       method: 'GET'
     });
 
-    if (response.ok) 
-    {
+    if (response.ok) {
       const calendarData = await response.json();
       console.log('Calendars retrieved successfully:', calendarData);
-      const calendarDetails = document.getElementById('calendarList'); // Change to your actual HTML element
-          calendarDetails.innerHTML = `
-              <strong>ID:</strong> ${calendarData[0] || 'N/A'}<br>
-              <strong>Title:</strong> ${calendarData[1] || 'N/A'}<br>
-              <strong>Details:</strong> ${calendarData[2] || 'N/A'}
-          `;
       
-    } 
-    else 
-    {
+      const calendarDetails = document.getElementById('calendarList'); // Change to your actual HTML element
+      calendarDetails.innerHTML = ''; // Clear previous content
+
+      // Check if the calendarData has data and is an array
+      if (Array.isArray(calendarData) && calendarData.length > 0) {
+        calendarData.forEach(calendar => {
+          const calendarItem = document.createElement('li'); // Create a new list item for each calendar
+          calendarItem.innerHTML = `
+            <strong>ID:</strong> ${calendar[0] || 'N/A'}<br>
+            <strong>Title:</strong> ${calendar[1] || 'N/A'}<br>
+            <strong>Details:</strong> ${calendar[2] || 'N/A'}
+          `;
+          calendarDetails.appendChild(calendarItem); // Append the new item to the calendarDetails element
+        });
+      } else {
+        calendarDetails.innerHTML = '<li>No calendars found.</li>'; // Handle empty response
+      }
+    } else {
       console.error('Error retrieving calendars:', response.status);
     }
-  } 
-  catch (error) {
+  } catch (error) {
     console.error('Error:', error);
   }
 }
 
-async function findCalendarById()
-{
+async function findCalendarById() {
   const calendarID = document.getElementById("calendar-id").value;
 
   if (!calendarID) {
-      console.error('Calendar ID is required.');
-      return; 
+    console.error('Calendar ID is required.');
+    return; 
   }
   
   try {
-      const response = await fetch(`/findCalendarById?calendar-id=${encodeURIComponent(calendarID)}`, {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-      });
+    const response = await fetch(`/findCalendarById?calendar-id=${encodeURIComponent(calendarID)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-      if (response.ok) {
-          const calendarData = await response.json();
-          console.log('Calendar retrieved successfully:', meetingData);
-          
-          const calendarDetails = document.getElementById('calendarList'); // Change to your actual HTML element
-          calendarDetails.innerHTML = `
-              <strong>ID:</strong> ${calendarData[0][0] || 'N/A'}<br>
-              <strong>Title:</strong> ${calendarData[0][1] || 'N/A'}<br>
-              <strong>Date:</strong> ${calendarData[0][2] || 'N/A'}<br>
-              <strong>Location:</strong> ${calendarData[0][3] || 'N/A'}<br>
-              <strong>Details:</strong> ${calendarData[0][4] || 'N/A'}
-          `;
+    if (response.ok) {
+      const calendarData = await response.json();
+      console.log('Calendar retrieved successfully:', calendarData);
+      
+      const calendarDetails = document.getElementById('calendarList'); // Change to your actual HTML element
+      calendarDetails.innerHTML = ''; // Clear previous content
+
+      // Check if calendarData has data and is an array
+      if (Array.isArray(calendarData) && calendarData.length > 0) {
+        // Display details of the found calendar
+        const calendarItem = document.createElement('li');
+        calendarItem.innerHTML = `
+          <strong>ID:</strong> ${calendarData[0] || 'N/A'}<br>
+          <strong>Title:</strong> ${calendarData[1] || 'N/A'}<br>
+          <strong>Details:</strong> ${calendarData[2] || 'N/A'}
+        `;
+        calendarDetails.appendChild(calendarItem);
       } else {
-          console.error('Error retrieving calendar:', response.status);
+        calendarDetails.innerHTML = '<li>No calendar found with this ID.</li>'; // Handle no data case
       }
+    } else {
+      console.error('Error retrieving calendar:', response.status);
+    }
   } catch (error) {
-      console.error('Error:', error);
+    console.error('Error:', error);
   }
-
 }
 
 async function updateCalendar()
@@ -532,6 +578,7 @@ async function updateCalendar()
   const calendarID = document.getElementById("calendar-id").value;
   const calendarTitle = document.getElementById("calendar-title").value;
   const calendarDetails = document.getElementById("calendar-details").value; 
+  console.log('js'+ calendarTitle);
 
     // Create JSON object
     const data = {

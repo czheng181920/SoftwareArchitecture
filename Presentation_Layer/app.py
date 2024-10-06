@@ -97,8 +97,9 @@ def deleteMeeting():
 
 @app.route('/listofCalendars', methods=['GET'])
 def getListCalendars():
-    data = request.get_json()
-    meeting_id = data.get('meeting_id')
+    meeting_id = request.args.get('meeting_id')  # Get meeting_id from query parameters
+    if not meeting_id:
+        return jsonify({"error": "Meeting ID is required"}), 400
     print("Meeting id of list of calendars sent to Business Layer")
     url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}/calendars'
     response = requests.get(url)
@@ -129,7 +130,7 @@ def addCalendar():
     response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
-@app.route('/allCalendar', methods=['GET'])
+@app.route('/allCalendars', methods=['GET'])
 def getCalendar():
     url = f'http://{BUSINESS_LAYER_IP}:5001/calendars' 
     response = requests.get(url)
@@ -148,10 +149,13 @@ def findCalendar():
         return jsonify(response.json()), response.status_code
     else:
         return jsonify({"error": "Failed to retrieve calendar"}), response.status_code
+    
 @app.route('/updateCalendar', methods=['PUT'])
 def updateCalendar():
     data = request.get_json()
+    print(data)
     title = data.get('calendar_title')
+    print('presentation', title)
     details = data.get('calendar_details')
 
     calendar_id = data.get('calendar_id')

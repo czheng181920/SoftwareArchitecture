@@ -129,8 +129,9 @@ def query_calendar_by_id(calendar_id):
 def update_calendar(calendar_id):
     # Inputs from API request
     data = request.get_json()
-    title = data.get('title')
-    details = data.get('details')
+    title = data.get('calendar_title')
+    print('business layer: ', data)
+    details = data.get('calendar_details')
 
     # Send request to the data layer
     response = requests.put(f"{DATA_LAYER_URL}/update_calendar/{calendar_id}", json={
