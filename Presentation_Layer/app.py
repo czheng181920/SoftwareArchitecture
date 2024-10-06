@@ -187,7 +187,7 @@ def meetingsInCalendar():
 def addParticipant():
     data = request.get_json()
     url = f'http://{BUSINESS_LAYER_IP}:5001/participant'
-    response = requests.post(url, json=data)
+    response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allParticipants', methods=['GET'])
@@ -199,10 +199,8 @@ def allParticipants():
 
 @app.route('/participantsByID', methods=['GET'])
 def participantById():
-    participant_id = request.args.get('participant-id')  # Get the meeting ID from query parameters
-    if not participant_id:
-        return jsonify({"error": "Participant ID is required"}), 400
-    
+    data = request.get_json()
+    participant_id = data.get('participant_id')
     url = f'http://{BUSINESS_LAYER_IP}:5001/participant/{participant_id}'
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
@@ -210,17 +208,9 @@ def participantById():
 @app.route('/updateParticipants', methods=['PUT'])
 def updateParticipants():
     data = request.get_json()
-    meeting_id = data.get('meeting_id')
-    name = data.get('name')
-    email = data.get('email')
-
     participant_id = data.get('participant_id')
     url = f'http://{BUSINESS_LAYER_IP}:5001/participant/{participant_id}'
-    response = requests.put(url,json={
-        "meeting_id": meeting_id,
-        "name": name, 
-        "email": email
-    })
+    response = requests.put(url,data)
     return jsonify(response.json()), response.status_code
 
 @app.route('/deleteParticipants', methods=['DELETE'])
@@ -235,7 +225,7 @@ def deleteParticipants():
 def addAttachment():
     data = request.get_json()
     url = f'http://{BUSINESS_LAYER_IP}:5001/attachment'
-    response = requests.post(url, json=data)
+    response = requests.post(url, data)
     return jsonify({"message": "Data sent to Business Layer", "response": response.text})
 
 @app.route('/allAttachment', methods=['GET'])

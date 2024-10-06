@@ -157,52 +157,27 @@ function handleParticipantOptionChange() {
   const participantNameSection = document.getElementById("participant-name-section");
   const participantEmailSection = document.getElementById("participant-email-section");
 
-  const participantSubmitSection = document.getElementById("participant-submit-section");
-  
-  const participantSubmitButton = document.getElementById("participantButton");
-
   // Display the meeting ID input field only for options that require it
   if (selectedParticipantOption === "1" || selectedParticipantOption === "4") {
     // Creating or querying all meetings does not require a meeting ID
     participantIdSection.style.display = "block";  
     meetingIdSection.style.display = "block";  
     participantNameSection.style.display = "block";    
-    participantEmailSection.style.display = "block";
-    participantSubmitSection.style.display = "block";   
+    participantEmailSection.style.display = "block";    
   } 
   else if (selectedParticipantOption === "2") {
     // Creating or querying all meetings does not require a meeting ID
     participantIdSection.style.display = "none";
     participantNameSection.style.display = "none";       
     participantEmailSection.style.display = "none";  
-    meetingIdSection.style.display = "none";
-    participantSubmitSection.style.display = "block";  
-
+    meetingIdSection.style.display = "none";     
   } else {
     // Other options (query by ID, update, delete) require a meeting ID
     participantIdSection.style.display = "block";
     participantNameSection.style.display = "none";   
     participantEmailSection.style.display = "none"; 
-    meetingIdSection.style.display = "none"; 
-    participantSubmitSection.style.display = "block";      
+    meetingIdSection.style.display = "none";     
   }
-
-  participantSubmitButton.onclick = function() 
-  {
-    if (selectedParticipantOption === "1") 
-    {
-      addParticipant();
-    } else if (selectedParticipantOption === "2") {
-      getAllParticipants();
-    } else if (selectedParticipantOption === "3") {
-      findParticipantById()
-    } else if (selectedParticipantOption === "4") {
-      updateParticipant();
-    } else if (selectedParticipantOption === "5") {
-      deleteParticipant();
-    } 
-  };
-
 }
 
 // Function to handle changes in the attachment management options
@@ -677,158 +652,10 @@ async function deleteCalendar()
 
 async function allMeetinginCalendar()
 {
-
-
+  
 
 }
 
-async function addParticipant(participantData) 
-{
-  const participantID = document.getElementById("participant-id").value;
-  const meetingID = document.getElementById("meeting-id").value;
-  const participantName = document.getElementById("participant-name").value;
-  const participantEmail = document.getElementById("participant-email").value;
-
-  const data = {
-    participant_id:participantID, 
-    meeting_id: meetingID,  
-    name: participantName, 
-    email: participantEmail
-
-  };
-
-  try {
-    const response = await fetch('/addParticipant', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log('Participant added successfully:', responseData);
-    } else {
-      console.error('Error adding participant:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-async function getAllParticipants() 
-{
-  try {
-    const response = await fetch('/allParticipants');
-
-    if (response.ok) 
-    {
-      const participantsData = await response.json();
-      console.log('Participants retrieved successfully:', participantsData);
-
-      const participantsDetails = document.getElementById('participantList'); // Change to your actual HTML element
-      participantsDetails.innerHTML = `
-              <strong>ID:</strong> ${participantsData[0][0] || 'N/A'}<br>
-              <strong>Title:</strong> ${participantsData[0][1] || 'N/A'}<br>
-              <strong>Date:</strong> ${participantsData[0][2] || 'N/A'}<br>
-              <strong>Location:</strong> ${participantsData[0][3] || 'N/A'}<br>
-              <strong>Details:</strong> ${participantsData[0][4] || 'N/A'}
-          `; 
-    } 
-    else {
-      console.error('Error retrieving participants:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-async function findParticipantById() 
-{
-  const participantId = document.getElementById("participant-id").value;
-  try {
-    const response = await fetch(`/findParticipantById?participant-id=${encodeURIComponent(participantId)}`, 
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.ok) 
-      {
-      const participantData = await response.json();
-      console.log('Participant retrieved successfully:', participantData);
-
-      const participantDetails = document.getElementById('participantDetails'); // Change to your actual HTML element
-      participantDetails.innerHTML = `
-          <strong>ID:</strong> ${participantData[0][0] || 'N/A'}<br>
-          <strong>Name:</strong> ${participantData[0][1] || 'N/A'}<br>
-          <strong>Email:</strong> ${participantData[0][2] || 'N/A'}<br>
-      `;
-    } else {
-      console.error('Error retrieving participant:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-async function updateParticipant(participantId, updatedData) 
-{
-  const participantId = document.getElementById("participant-id").value;
-
-  const meetingID = document.getElementById("meeting-id").value;
-  const participantName = document.getElementById("participant-name").value;
-  const participantEmail = document.getElementById("participant-email").value;
-
-  const updatedData = {
-    meeting_id: meetingID,  
-    name: participantName, 
-    email: participantEmail
-
-  };
-
-  try {
-    const response = await fetch(`/updateParticipants/${participantId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updatedData)
-    });
-
-    if (response.ok) {
-      console.log('Participant updated successfully');
-    } else {
-      console.error('Error updating participant:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-async function deleteParticipant(participantId) 
-{
-  const participantId = document.getElementById("participant-id").value;
-
-  try 
-  {
-    const response = await fetch(`/deleteParticipants/${participantId}`, {
-      method: 'DELETE'
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log('Participant deleted successfully:', result.message);
-    } else {
-      console.error('Error deleting participant:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
 
 
 
