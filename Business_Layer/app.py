@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # data layer server IP address and port
 # TODO: test this with the actual IP address
-DATA_LAYER_URL = 'http://<Data_Layer_IP>:5002/store'
+DATA_LAYER_URL = 'http://172.20.96.214:5002/store'
 
 # mock, delete later TODO
 @app.route('/process', methods=['POST'])

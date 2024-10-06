@@ -35,10 +35,13 @@ function handleMeetingOptionChange() {
   const meetingLocationSection = document.getElementById("meeting-location-section");
   const meetingDetailsSection = document.getElementById("meeting-details-section");
   const meetingSubmitSection = document.getElementById("meeting-submit-section");
+  
+  const meetingSubmitButton = document.getElementById("submitButton");
 
 
   // Display the meeting ID input field only for options that require it
-  if (selectedMeetingOption === "1" || selectedMeetingOption === "4") {
+  if (selectedMeetingOption === "1" || selectedMeetingOption === "4") 
+  {
     // Creating meetings and querying meeting by id 
     meetingIdSection.style.display = "block";
     meetingTitleSection.style.display = "block";  
@@ -46,9 +49,9 @@ function handleMeetingOptionChange() {
     meetingLocationSection.style.display = "block";    
     meetingDetailsSection.style.display = "block";
     meetingSubmitSection.style.diplay = "block";  
-   
   } 
-  else if (selectedMeetingOption === "2") {
+  else if (selectedMeetingOption === "2") 
+  {
     // querying all meeting id
     meetingIdSection.style.display = "none";
     meetingTitleSection.style.display = "none";   
@@ -65,6 +68,39 @@ function handleMeetingOptionChange() {
     meetingLocationSection.style.display = "none";    
     meetingDetailsSection.style.display = "none";
     meetingSubmitSection.style.diplay = "block";    
+  }
+
+  if(selectedMeetingOption === "1")
+  {
+    meetingSubmitButton.onclick = "meetingSubmit()"
+  }
+  else if(selectedMeetingOption === "2")
+  {
+    meetingSubmitButton.onclick = "meetingQuery()"
+  }
+  else if(selectedMeetingOption === "3")
+  {
+    meetingSubmitButton.onclick = "meetingQueryByID()"
+  }
+  else if(selectedMeetingOption === "4")
+  {
+    meetingSubmitButton.onclick = "updateMeeting()"
+  }
+  else if(selectedMeetingOption === "5")
+  {
+    meetingSubmitButton.onclick = "deleteMeeting()"
+  }
+  else if(selectedMeetingOption === "6")
+  {
+    meetingSubmitButton.onclick = "listofCalendarsMeeting()"
+  }
+  else if(selectedMeetingOption === "7")
+  {
+    meetingSubmitButton.onclick = "listofParticipantsMeeting()"
+  }
+  else if(selectedMeetingOption === "8")
+  {
+    meetingSubmitButton.onclick = "listofAttachmentsMeeting()"
   }
 }
 
@@ -198,11 +234,77 @@ async function meetingSubmit()
        
       }
     } 
-    catch (error) {
+    catch (error) 
+    {
       console.error('Error:', error);
       
     }
 }
+
+async function meetingQuery()
+{
+  try {
+    const response = await fetch('/allMeetings');
+
+    if (response.ok) 
+      {
+      const meetingsData = await response.json();
+      const meetingsList = document.getElementById('meetingsList');
+
+      meetingsList.innerHTML = ''; // Clear previous content
+
+      meetingsData.forEach(meeting => 
+        {
+        const meetingItem = document.createElement('li');
+        meetingItem.textContent = meeting.title; // Assuming 'title' is the key for meeting titles
+        meetingsList.appendChild(meetingItem);
+      });
+    } 
+    else {
+      console.error('Error retrieving meetings:', response.status);
+    }
+  } 
+  catch (error) {
+    console.error('Error:', error);
+  }
+
+}
+
+async function meetingQueryByID()
+{
+
+
+}
+
+async function updateMeeting()
+{
+
+}
+
+async function deleteMeeting()
+{
+
+}
+
+async function listofCalendarsMeeting()
+{
+
+}
+
+async function listofParticipantsMeeting()
+{
+
+}
+
+async function listofAttachmentsMeeting()
+{
+
+}
+
+
+
+
+
 
 
 
