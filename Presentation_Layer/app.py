@@ -183,6 +183,27 @@ def meetingsInCalendar():
     response = requests.get(url, data)
     return jsonify(response.json()), response.status_code
 
+@app.route('/addMeetingToCalendar', methods=['POST'])
+def add_meeting_to_calendar_presentation():
+    data = request.get_json()
+    meeting_id = data.get('meeting_id')
+    calendar_id = data.get('calendar_id')
+
+    if not meeting_id or not calendar_id:
+        return jsonify({"error": "Meeting ID and Calendar ID are required"}), 400
+
+    # Forward the request to the business layer
+    url = f'http://{BUSINESS_LAYER_IP}:5001/calendar/addMeeting'
+    
+    try:
+        response = requests.post(url, json={
+            'meeting_id': meeting_id,
+            'calendar_id': calendar_id
+        })
+        return jsonify(response.json()), response.status_code
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/addParticipant', methods=['POST'])
 def addParticipant():
     data = request.get_json()

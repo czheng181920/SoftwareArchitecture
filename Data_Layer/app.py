@@ -142,6 +142,7 @@ def delete_calendar(calendar_id):
         return jsonify({"message": "Calendar deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 @app.route('/store/associate_calendar_meeting', methods=['POST'])
 def create_associated_calendar_meeting():
     data = request.json
@@ -153,6 +154,7 @@ def create_associated_calendar_meeting():
         return jsonify({"message": "Meeting associated with calendar successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 @app.route('/store/delete_meeting_calendar', methods=['DELETE'])
 def delete_meeting_calendar():
     data = request.json
