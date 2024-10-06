@@ -265,36 +265,43 @@ async function meetingQuery()
 
 }
 
-async function meetingQueryByID()
-{
+async function meetingQueryByID() {
   const meetingID = document.getElementById("meeting-id").value;
 
-  // Create JSON object
-  const data = {
-    meeting_id: meetingID
-  };
-    
-  try {
-      const response = await fetch('/meetingByID', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+  if (!meetingID) {
+      console.error('Meeting ID is required.');
+      return; // Exit the function if meeting ID is not provided
+  }
   
-      if (response.ok) {
-        const meetingData = await response.json();
-        console.log('Meeting retrieved successfully:', meetingData);
-        // Handle retrieved meeting data, e.g., display in UI
-      } 
-      else {
-        console.error('Error retrieving meeting:', response.status);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  try {
+      // Send a GET request to the endpoint with the meeting ID as a query parameter
+      const response = await fetch(`/meetingByID?meeting-id=${encodeURIComponent(meetingID)}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
 
+      if (response.ok) {
+          const meetingData = await response.json();
+          console.log('Meeting retrieved successfully:', meetingData);
+          
+          const meetingDetails = document.getElementById('meetingsList'); // Change to your actual HTML element
+          meetingDetails.innerHTML = `
+              <strong>ID:</strong> ${meetingData[0][0] || 'N/A'}<br>
+              <strong>Title:</strong> ${meetingData[0][1] || 'N/A'}<br>
+              <strong>Date:</strong> ${meetingData[0][2] || 'N/A'}<br>
+              <strong>Location:</strong> ${meetingData[0][3] || 'N/A'}<br>
+              <strong>Details:</strong> ${meetingData[0][4] || 'N/A'}
+          `;
+      } else {
+          console.error('Error retrieving meeting:', response.status);
+      }
+  } catch (error) {
+      console.error('Error:', error);
+  }
 }
+
 
 async function updateMeeting()
 {
@@ -322,16 +329,13 @@ async function updateMeeting()
             {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data), // Assuming updatedData is an object with updated fields
+            body: JSON.stringify(data),
         });
 
         if (response.ok) 
           {
             const updatedMeeting = await response.json();
             console.log('Updated Meeting:', updatedMeeting);
-
-            // Optionally, display a success message or update the UI accordingly
-            alert('Meeting updated successfully!');
         } 
         else 
         {
@@ -344,9 +348,33 @@ async function updateMeeting()
     }
 }
 
-async function deleteMeeting()
-{
+async function deleteMeeting() {
+  const meetingID = document.getElementById("meeting-id").value; // Get the meeting ID
 
+  // Create JSON object
+  const data = {
+      meeting_id: meetingID
+  };
+
+  try {
+      const response = await fetch('/deleteMeeting', {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+          const result = await response.json();
+          console.log('Meeting deleted successfully:', result.message);
+          // Optionally, you can update the UI to reflect the deletion
+      } else {
+          console.error('Error deleting meeting:', response.status);
+      }
+  } catch (error) {
+      console.error('Error:', error);
+  }
 }
 
 async function listofCalendarsMeeting()

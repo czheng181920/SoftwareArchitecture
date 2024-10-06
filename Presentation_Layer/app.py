@@ -36,15 +36,21 @@ def getMeetings():
     response = requests.get(url)
     return jsonify(response.json()), response.status_code
 
-
 @app.route('/meetingByID', methods=['GET'])
 def getMeetingByID():
-    data = request.get_json()
-    meeting_id = data.get('meeting-id')
-    print("Meeting id to by found sent to Business Layer")
+    meeting_id = request.args.get('meeting-id')  # Get the meeting ID from query parameters
+    if not meeting_id:
+        return jsonify({"error": "Meeting ID is required"}), 400  # Return an error if ID is missing
+
+    print("Meeting id to be found sent to Business Layer")
     url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
     response = requests.get(url)
-    return jsonify(response.json()), response.status_code
+
+    # Check if the response from the business layer is valid
+    if response.ok:
+        return jsonify(response.json()), response.status_code
+    else:
+        return jsonify({"error": "Failed to retrieve meeting"}), response.status_code
 
 
 @app.route('/updateMeeting', methods=['PUT'])
@@ -54,7 +60,7 @@ def updateMeetingByID():
     date_time = data.get('date_time')
     location = data.get('location')
     details = data.get('details')
-    
+
     meeting_id = data.get('meeting_id')
     print("Meeting id to be updated sent to Business Layer")
     url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
@@ -68,12 +74,26 @@ def updateMeetingByID():
 
 @app.route('/deleteMeeting', methods=['DELETE'])
 def deleteMeeting():
-    data = request.get_json()
-    meeting_id = data.get('meeting_id')
-    print("Meeting id to be deleted sent to Business Layer")
+    data = request.get_json()  # Get the JSON data from the request
+    meeting_id = data.get('meeting_id')  # Extract the meeting ID
+
+    if not meeting_id:  # Validate the meeting_id
+        return jsonify({"error": "Meeting ID is required"}), 400
+
+    print("Meeting ID to be deleted sent to Business Layer:", meeting_id)
     url = f'http://{BUSINESS_LAYER_IP}:5001/meeting/{meeting_id}'
-    response = requests.delete(url)
-    return jsonify(response.json()), response.status_code
+    
+    try:
+        response = requests.delete(url)  # Call the business layer
+
+        if response.ok:
+            return jsonify({"message": "Meeting deleted successfully"}), response.status_code
+        else:
+            return jsonify({"error": "Meeting not found or could not be deleted"}), response.status_code
+    
+    except requests.exceptions.RequestException as e:
+        print("Error occurred while communicating with the business layer:", e)
+        return jsonify({"error": "An error occurred while deleting the meeting"}), 500
 
 @app.route('/listofCalendars', methods=['GET'])
 def getListCalendars():
